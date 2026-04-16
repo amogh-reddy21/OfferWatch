@@ -111,7 +111,7 @@ def get_errors():
         return jsonify(results), 200
 
     except Error as e:
-        current_app.logger.error(f'get_error happened: {e}')
+        current_app.logger.error(f'get_error error happened: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
@@ -143,7 +143,7 @@ def get_outdated_records():
         return jsonify(results), 200
 
     except Error as e:
-        current_app.logger.error(f'get_outdated_records happened: {e}')
+        current_app.logger.error(f'get_outdated_records error happened: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
@@ -181,7 +181,59 @@ def create_user():
         }), 201
 
     except Error as e:
-        current_app.logger.error(f'create_users happened: {e}')
+        current_app.logger.error(f'create_users error happened: {e}')
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+
+
+@admin.route("/users/<int:user_id>", methods=["PUT"])
+def update_user(user_id):
+    cursor = get_db().cursor(dictionary=True)
+
+    try:
+        data = request.get_json()
+
+        cursor.execute("""
+                       SELECT UserID 
+                       FROM `User` 
+                       WHERE UserID = %s
+                    """, (user_id,))
+        
+        if not cursor.fetchone():
+            return jsonify({"error": "User wasn't found"}), 404
+
+        allowed = ["RoleID", "InstitutionID"]
+        
+        updates = []
+        params  = []
+
+        for f in allowed:
+            if f in data:
+                updates.append(f"{f} = %s")
+                params.append(data[f])
+
+        if not updates:
+            return jsonify({"error": "No valid fields to update"}), 400
+
+        params.append(user_id)
+        
+        cursor.execute(f"""
+            UPDATE `User` 
+            SET {', '.join(updates)} 
+            WHERE UserID = %s
+            """,
+            params
+        )
+
+        get_db().commit()
+
+        return jsonify({
+            "message": "User updated successfully"
+            }), 200
+
+    except Error as e:
+        current_app.logger.error(f'update_user error happened: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
