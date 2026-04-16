@@ -59,3 +59,31 @@ def get_health():
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
+
+
+@admin.route("/users", methods=["GET"])
+def get_users():
+    cursor = get_db().cursor(dictionary=True)
+
+    try:
+        cursor.execute("""
+            SELECT u.UserID,
+                   CONCAT(u.FirstName, ' ', u.LastName) AS FullName,
+                   u.Email,
+                   r.RoleName,
+                   i.InstitutionName,
+                   u.Account_Status
+            FROM `User` u
+                JOIN Role r ON u.RoleID = r.RoleID
+                JOIN Institution i ON u.InstitutionID = i.InstitutionID
+            ORDER BY u.Created_At DESC;
+        """)
+
+        results = cursor.fetchall()
+        return jsonify(results), 200
+
+    except Error as e:
+        current_app.logger.error(f'get_health error happened: {e}')
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
