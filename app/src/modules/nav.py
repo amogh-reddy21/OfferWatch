@@ -67,14 +67,26 @@ def classification_nav():
 
 # ---- Role: administrator ----------------------------------------------------
 
-def admin_home_nav():
-    st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
+# def admin_home_nav():
+#     st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
 
 
-def ml_model_mgmt_nav():
-    st.sidebar.page_link(
-        "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
-    )
+# def ml_model_mgmt_nav():
+#     st.sidebar.page_link(
+#         "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
+#     )
+
+def admin_dashboard_nav():
+    st.sidebar.page_link("pages/30_Admin_Dashboard.py", label="Dashboard", icon="🖥️")
+
+def admin_users_nav():
+    st.sidebar.page_link("pages/31_User_Management_.py", label="User Management", icon="🖥️")
+
+def admin_errors_nav():
+    st.sidebar.page_link("pages/32_Error_Logs.py", label="Error Logs", icon="🖥️")
+
+def admin_cleanup_nav():
+    st.sidebar.page_link("pages/33_Data_Cleanup.py", label="Data Cleanup", icon="🖥️")
 
 
 # ---- Sidebar assembly -------------------------------------------------------
@@ -112,8 +124,10 @@ def SideBarLinks(show_home=False):
             classification_nav()
 
         if st.session_state["role"] == "administrator":
-            admin_home_nav()
-            ml_model_mgmt_nav()
+            admin_dashboard_nav()
+            admin_users_nav()
+            admin_errors_nav()
+            admin_cleanup_nav()
 
     # About link appears at the bottom for all roles
     about_page_nav()
