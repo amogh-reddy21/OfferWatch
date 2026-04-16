@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, current_app, redirect, url_for
+from flask import Blueprint, jsonify, request, current_app
 from backend.db_connection import get_db
 from mysql.connector import Error
 
@@ -55,7 +55,7 @@ def get_health():
         }), 200
 
     except Error as e:
-        current_app.logger.error(f'get_health error happened: {e}')
+        current_app.logger.error(f'get_health error: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
@@ -83,7 +83,7 @@ def get_users():
         return jsonify(results), 200
 
     except Error as e:
-        current_app.logger.error(f'get_users error happened: {e}')
+        current_app.logger.error(f'get_users error: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
@@ -111,7 +111,7 @@ def get_errors():
         return jsonify(results), 200
 
     except Error as e:
-        current_app.logger.error(f'get_error error happened: {e}')
+        current_app.logger.error(f'get_error error: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
@@ -143,7 +143,7 @@ def get_outdated_records():
         return jsonify(results), 200
 
     except Error as e:
-        current_app.logger.error(f'get_outdated_records error happened: {e}')
+        current_app.logger.error(f'get_outdated_records error: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
@@ -164,7 +164,7 @@ def create_user():
 
         cursor.execute("""
             INSERT INTO `User`(FirstName, LastName, Email, RoleID, InstitutionID, Account_Status)
-                VALUES (%s, %s, %s, %s, %s, 'Active')
+                VALUES (%s, %s, %s, %s, %s, 'Active');
         """, (
             data["FirstName"],
             data["LastName"],
@@ -181,7 +181,7 @@ def create_user():
         }), 201
 
     except Error as e:
-        current_app.logger.error(f'create_users error happened: {e}')
+        current_app.logger.error(f'create_users error: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
@@ -197,7 +197,7 @@ def update_user(user_id):
         cursor.execute("""
                 SELECT UserID 
                 FROM `User` 
-                WHERE UserID = %s
+                WHERE UserID = %s;
             """, (user_id,))
 
         if not cursor.fetchone():
@@ -220,7 +220,7 @@ def update_user(user_id):
         cursor.execute(f"""
             UPDATE `User` 
             SET {', '.join(updates)} 
-            WHERE UserID = %s
+            WHERE UserID = %s;
             """,
             params
         )
@@ -232,7 +232,7 @@ def update_user(user_id):
             }), 200
 
     except Error as e:
-        current_app.logger.error(f'update_user error happened: {e}')
+        current_app.logger.error(f'update_user error: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
@@ -246,7 +246,7 @@ def deactivate_user(user_id):
         cursor.execute("""
                 SELECT UserID 
                 FROM `User` 
-                WHERE UserID = %s
+                WHERE UserID = %s;
             """, (user_id,))
 
         if not cursor.fetchone():
@@ -255,7 +255,7 @@ def deactivate_user(user_id):
         cursor.execute("""
             UPDATE `User`
             SET Account_Status = 'Inactive', Deactivated_At = NOW()
-            WHERE  UserID = %s
+            WHERE  UserID = %s;
         """, (user_id,))
         
         get_db().commit()
@@ -265,7 +265,32 @@ def deactivate_user(user_id):
             }), 200
 
     except Error as e:
-        current_app.logger.error(f'deactivate_user error happened: {e}')
+        current_app.logger.error(f'deactivate_user error: {e}')
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+
+
+@admin.route("/data-cleanup", methods=["DELETE"])
+def delete_outdated_records():
+    cursor = get_db().cursor(dictionary=True)
+
+    try:
+        cursor.execute("""
+            DELETE FROM Job_Application
+            WHERE IsArchived = TRUE
+            AND Application_Date < DATE_SUB(NOW(), INTERVAL 2 YEAR);
+        """)
+        
+        get_db().commit()
+
+        return jsonify({
+            "message": f"Deleted {cursor.rowcount} outdated record(s)",
+            "num_rows_deleted": cursor.rowcount
+        }), 200
+
+    except Error as e:
+        current_app.logger.error(f'delete_outdated_records error: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
