@@ -195,16 +195,15 @@ def update_user(user_id):
         data = request.get_json()
 
         cursor.execute("""
-                       SELECT UserID 
-                       FROM `User` 
-                       WHERE UserID = %s
-                    """, (user_id,))
-        
+                SELECT UserID 
+                FROM `User` 
+                WHERE UserID = %s
+            """, (user_id,))
+
         if not cursor.fetchone():
             return jsonify({"error": "User wasn't found"}), 404
 
         allowed = ["RoleID", "InstitutionID"]
-        
         updates = []
         params  = []
 
@@ -234,6 +233,39 @@ def update_user(user_id):
 
     except Error as e:
         current_app.logger.error(f'update_user error happened: {e}')
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+
+
+@admin.route("/users/<int:user_id>", methods=["DELETE"])
+def deactivate_user(user_id):
+    cursor = get_db().cursor(dictionary=True)
+
+    try:
+        cursor.execute("""
+                SELECT UserID 
+                FROM `User` 
+                WHERE UserID = %s
+            """, (user_id,))
+
+        if not cursor.fetchone():
+            return jsonify({"error": "User wasn't found"}), 404
+
+        cursor.execute("""
+            UPDATE `User`
+            SET Account_Status = 'Inactive', Deactivated_At = NOW()
+            WHERE  UserID = %s
+        """, (user_id,))
+        
+        get_db().commit()
+
+        return jsonify({
+            "message": "User deactivated successfully"
+            }), 200
+
+    except Error as e:
+        current_app.logger.error(f'deactivate_user error happened: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
