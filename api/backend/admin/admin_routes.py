@@ -89,7 +89,7 @@ def get_users():
         cursor.close()
 
 
-@admin.route("/data-cleanup", methods=["GET"])
+@admin.route("/errors", methods=["GET"])
 def get_errors():
     cursor = get_db().cursor(dictionary=True)
 
@@ -144,6 +144,44 @@ def get_outdated_records():
 
     except Error as e:
         current_app.logger.error(f'get_outdated_records happened: {e}')
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+
+
+@admin.route("/users", methods=["POST"])
+def create_user():
+    cursor = get_db().cursor(dictionary=True)
+
+    try:
+        data = request.get_json()
+
+        needed = ["FirstName", "LastName", "Email", "RoleID", "InstitutionID"]
+        
+        for field in needed:
+            if field not in data:
+                return jsonify({"error": f"Missing needed field: {field}"}), 400
+
+        cursor.execute("""
+            INSERT INTO `User`(FirstName, LastName, Email, RoleID, InstitutionID, Account_Status)
+                VALUES (%s, %s, %s, %s, %s, 'Active')
+        """, (
+            data["FirstName"],
+            data["LastName"],
+            data["Email"],
+            data["RoleID"],
+            data["InstitutionID"]
+        ))
+
+        get_db().commit()
+
+        return jsonify({
+            "message": "User created successfully",
+            "user_id": cursor.lastrowid
+        }), 201
+
+    except Error as e:
+        current_app.logger.error(f'create_users happened: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
