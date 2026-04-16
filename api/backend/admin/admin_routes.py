@@ -50,7 +50,7 @@ def get_health():
             "active_users":  active_users["ActiveUsers"],
             "api_response":  api_response["APIResponse"],
             "errors_24h":    errors["ErrorsLast24h"],
-            "uptime":        uptime["Uptime"],
+            "uptime":        uptime["Uptime"] if uptime else None,
             "components":    components
         }), 200
 
