@@ -377,7 +377,8 @@ INSERT INTO Error_Log (Error_Type, Occurred_At, Status, Severity, Message, Compo
 INSERT INTO Health_Metric (Metric_Name, Metric_Value, Metric_Unit, Recorded_At, ComponentID) VALUES
 ('Response Time', 154.25, 'ms', '2026-04-06 12:00:00', 2),
 ('Active Connections', 45.00, 'count', '2026-04-06 12:00:00', 1),
-('Delivery Success Rate', 92.50, '%', '2026-04-06 12:00:00', 3);
+('Delivery Success Rate', 92.50, '%', '2026-04-06 12:00:00', 3),
+('Uptime', 99.20, '%', NOW(), 1);
 
 INSERT INTO Data_Correction
 (UserID, Correction_Type, Correction_Date, Old_Value, New_Value, CorrectedByUserID) VALUES
