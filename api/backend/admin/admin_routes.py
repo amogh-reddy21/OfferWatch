@@ -89,7 +89,7 @@ def get_users():
         cursor.close()
 
 
-@admin.route("/errors", methods=["GET"])
+@admin.route("/data-cleanup", methods=["GET"])
 def get_errors():
     cursor = get_db().cursor(dictionary=True)
 
@@ -104,7 +104,7 @@ def get_errors():
                    el.Message
             FROM Error_Log el
                 JOIN Service_Component sc ON el.ComponentID = sc.ComponentID
-            ORDER BY el.Occurred_At DESC
+            ORDER BY el.Occurred_At DESC;
         """)
 
         results = cursor.fetchall()
@@ -112,6 +112,38 @@ def get_errors():
 
     except Error as e:
         current_app.logger.error(f'get_error happened: {e}')
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+
+
+@admin.route("/data-cleanup", methods=["GET"])
+def get_outdated_records():
+    cursor = get_db().cursor(dictionary=True)
+
+    try:
+        cursor.execute("""
+            SELECT ja.ApplicationID,
+                   CONCAT(u.FirstName, ' ', u.LastName) AS StudentName,
+                   p.Title AS PositionTitle,
+                   e.Name AS EmployerName,
+                   ja.Application_Date,
+                   ja.Status,
+                   ja.IsArchived
+            FROM Job_Application ja
+                JOIN Student s ON ja.StudentID = s.StudentID
+                JOIN `User` u ON s.UserID = u.UserID
+                JOIN `Position` p ON ja.PositionID = p.PositionID
+                JOIN Employer e ON p.EmployerID = e.EmployerID
+            WHERE ja.IsArchived = TRUE
+            ORDER BY ja.Application_Date;
+        """)
+
+        results = cursor.fetchall()
+        return jsonify(results), 200
+
+    except Error as e:
+        current_app.logger.error(f'get_outdated_records happened: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
