@@ -83,7 +83,35 @@ def get_users():
         return jsonify(results), 200
 
     except Error as e:
-        current_app.logger.error(f'get_health error happened: {e}')
+        current_app.logger.error(f'get_users error happened: {e}')
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+
+
+@admin.route("/errors", methods=["GET"])
+def get_errors():
+    cursor = get_db().cursor(dictionary=True)
+
+    try:
+        cursor.execute("""
+            SELECT el.ErrorID,
+                   sc.Component_Name,
+                   el.Error_Type,
+                   el.Severity,
+                   el.Status,
+                   el.Occurred_At,
+                   el.Message
+            FROM Error_Log el
+                JOIN Service_Component sc ON el.ComponentID = sc.ComponentID
+            ORDER BY el.Occurred_At DESC
+        """)
+
+        results = cursor.fetchall()
+        return jsonify(results), 200
+
+    except Error as e:
+        current_app.logger.error(f'get_error happened: {e}')
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
