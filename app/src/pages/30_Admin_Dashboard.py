@@ -52,7 +52,6 @@ with col4:
               value=f"{health['uptime']}%" 
               if health["uptime"] else "N/A")
 
-
 st.subheader("System Status")
 
 for component in health["components"]:
@@ -66,7 +65,7 @@ for component in health["components"]:
                 border-radius: 6px;
                 margin-bottom: 8px;
                 color: white;
-            ">
+                    ">
                 {component["Component_Name"]}
             </div>
         """, unsafe_allow_html=True)
@@ -89,46 +88,12 @@ for component in health["components"]:
             </div>
         """, unsafe_allow_html=True)
 
-# dd
-# st.subheader("Recent Errors")
-
-# error_response = requests.get(f"{API_BASE}/admin/errors")
-# errors = error_response.json()
-# recent_errors = errors[:5]
-
-# # Header row
-# col1, col2, col3 = st.columns([2, 2, 1])
-# with col1:
-#     st.markdown("**Component**")
-# with col2:
-#     st.markdown("**Error Type**")
-# with col3:
-#     st.markdown("**Status**")
-
-# st.markdown("<hr style='margin: 5px 0;'>", unsafe_allow_html=True)
-
-# # Error rows
-# for error in recent_errors:
-#     col1, col2, col3 = st.columns([2, 2, 1])
-#     with col1:
-#         st.write(error["Component_Name"])
-#     with col2:
-#         st.write(error["Error_Type"])
-#     with col3:
-#         icon = "🔴" if error["Status"] == "Unresolved" else "🟢"
-#         st.write(f"{icon} {error['Status']}")
-#     st.markdown("<hr style='margin: 5px 0; border-color: #eeeeee;'>", unsafe_allow_html=True)
-
-# if st.button("View All Errors →"):
-#     st.switch_page("pages/32_Error_Logs.py")
-
 st.subheader("Recent Errors")
 
 error_response = requests.get(f"{API_BASE}/admin/errors")
 errors = error_response.json()
 recent_errors = errors[:5]
 
-# Header outside the div
 col1, col2, col3 = st.columns([2, 2, 1])
 with col1:
     st.markdown("**Component**")
@@ -137,10 +102,13 @@ with col2:
 with col3:
     st.markdown("**Status**")
 
-# Build rows
 rows_html = ""
 for error in recent_errors:
-    icon = "&#128308;" if error["Status"] == "Unresolved" else "&#128994;"
+    icon = "🟢"
+
+    if error["Status"] == "Unresolved":
+        icon = "🔴"
+        
     rows_html += f"""<div style="display: flex; justify-content: space-between; padding: 10px 20px; border-bottom: 1px solid #444; color: white;">
 <span style="flex: 1;">{error["Component_Name"]}</span>
 <span style="flex: 1;">{error["Error_Type"]}</span>
@@ -149,5 +117,5 @@ for error in recent_errors:
 
 st.markdown(f'<div style="background-color: #2c2c2c; border-radius: 8px; overflow: hidden;">{rows_html}</div>', unsafe_allow_html=True)
 
-if st.button("View All Errors →"):
+if st.button("View All Errors ->"):
     st.switch_page("pages/32_Error_Logs.py")
