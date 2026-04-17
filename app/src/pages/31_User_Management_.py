@@ -10,6 +10,14 @@ SideBarLinks()
 
 API_BASE = "http://web-api:4000"
 
+st.markdown("""
+    <style>
+        .stApp {
+            background-color: #FAF9F6;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 st.title("User Management")
 st.write("Add, Update, or Deactivate user accounts")
 
@@ -47,19 +55,52 @@ with col2:
 
 if st.button("Add User", type="primary"):
     if first_name and last_name and email:
-        input = {
+        added_input = {
             "FirstName": first_name,
             "LastName": last_name,
             "Email": email,
             "RoleID": role_id,
             "InstitutionID": institution_id
         }
-        result = requests.post(f"{API_BASE}/admin/users", json=input)
+        added_result = requests.post(f"{API_BASE}/admin/users", json=added_input)
 
-        if result.status_code == 201:
+        if added_result.status_code == 201:
             st.success("User created successfully!")
             st.rerun()
         else:
             st.error("Something went wrong. Was not able to create you user")
     else:
         st.warning("Please fill in all the fields.")
+
+st.subheader("Update User")
+
+col1, col2 = st.columns(2)
+with col1:
+    update_id = st.number_input("User ID to Update", min_value=1, step=1)
+    new_role_id = st.selectbox("New Role", options=[1, 2, 3, 4],format_func=role_options.get)
+with col2:
+    new_institution_id = st.selectbox("New Institution", options=[1, 2, 3],format_func=institution_options.get)
+
+if st.button("Update User", type="primary"):
+    update_input = {
+        "RoleID": new_role_id,
+        "InstitutionID": new_institution_id
+    }
+    update_result = requests.put(f"{API_BASE}/admin/users/{update_id}", json=update_input)
+    if update_result.status_code == 200:
+        st.success("User updated successfully!")
+        st.rerun()
+    else:
+        st.error("User not found.")
+
+st.subheader("Deactivate User")
+
+deactivate_id = st.number_input("User ID to Deactivate", min_value=1, step=1)
+
+if st.button("Deactivate User", type="primary"):
+    deactivate_result = requests.delete(f"{API_BASE}/admin/users/{deactivate_id}")
+    if deactivate_result.status_code == 200:
+        st.success("User deactivated successfully!")
+        st.rerun()
+    else:
+        st.error("User not found.")
