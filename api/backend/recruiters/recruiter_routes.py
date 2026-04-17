@@ -6,7 +6,7 @@ recruiters = Blueprint("recruiters", __name__)
 
 
 # GET /rec/candidates
-# List all candidates with optional filters: ?name=, ?university=, ?stage=, ?cycle=
+# List all candidates with optional filters: ?name=, ?university=, ?stage=
 @recruiters.route("/candidates", methods=["GET"])
 def get_candidates():
     cursor = get_db().cursor(dictionary=True)
@@ -16,7 +16,6 @@ def get_candidates():
         name = request.args.get("name")
         university = request.args.get("university")
         stage = request.args.get("stage")
-        cycle = request.args.get("cycle")
 
         query = """
             SELECT
@@ -25,11 +24,9 @@ def get_candidates():
                 u.Email,
                 i.InstitutionName AS university,
                 p.Title AS role,
-                a.Cycle AS cycle,
                 a.Status AS stage,
                 a.ApplicationID,
-                COALESCE(a.LastUpdated, a.Application_Date) AS last_updated,
-                s.DegreeLevel AS degree_level
+                a.Application_Date
             FROM Student s
             JOIN `User` u ON s.UserID = u.UserID
             JOIN Institution i ON u.InstitutionID = i.InstitutionID
@@ -48,11 +45,8 @@ def get_candidates():
         if stage:
             query += " AND a.Status = %s"
             params.append(stage)
-        if cycle:
-            query += " AND a.Cycle = %s"
-            params.append(cycle)
 
-        query += " ORDER BY last_updated DESC"
+        query += " ORDER BY a.Application_Date DESC"
 
         cursor.execute(query, params)
         candidates = cursor.fetchall()
@@ -79,7 +73,6 @@ def get_candidate_profile(student_id):
                 u.LastName,
                 u.Email,
                 i.InstitutionName AS university,
-                s.DegreeLevel AS degree_level,
                 s.GPA,
                 s.Year
             FROM Student s
@@ -96,9 +89,7 @@ def get_candidate_profile(student_id):
             SELECT
                 a.ApplicationID,
                 a.Status AS stage,
-                a.Cycle AS cycle,
                 a.Application_Date,
-                COALESCE(a.LastUpdated, a.Application_Date) AS last_updated,
                 p.Title AS role,
                 e.Name AS employer
             FROM Job_Application a
@@ -148,8 +139,8 @@ def update_stage(app_id):
 
 
 # POST /rec/applications/<app_id>/notes
-# Add a recruiter note to an application
-# Body: { "note_text": "...", "recruiter_id": 1 }
+# Add a note to an application
+# Body: { "note_text": "..." }
 @recruiters.route("/applications/<int:app_id>/notes", methods=["POST"])
 def add_note(app_id):
     cursor = get_db().cursor(dictionary=True)
@@ -164,12 +155,10 @@ def add_note(app_id):
         if not cursor.fetchone():
             return jsonify({"error": "Application not found"}), 404
 
-        recruiter_id = data.get("recruiter_id")
-
         cursor.execute("""
-            INSERT INTO Note (ApplicationID, Note_Text, Created_At, RecruiterID)
-            VALUES (%s, %s, NOW(), %s)
-        """, (app_id, data["note_text"], recruiter_id))
+            INSERT INTO Note (ApplicationID, Note_Text, Created_At)
+            VALUES (%s, %s, NOW())
+        """, (app_id, data["note_text"]))
         get_db().commit()
 
         return jsonify({"message": "Note added successfully", "note_id": cursor.lastrowid}), 201
@@ -193,20 +182,12 @@ def get_notes(app_id):
             return jsonify({"error": "Application not found"}), 404
 
         cursor.execute("""
-            SELECT
-                n.NoteID,
-                n.Note_Text,
-                n.Created_At,
-                n.RecruiterID,
-                CONCAT(u.FirstName, ' ', u.LastName) AS recruiter_name
-            FROM Note n
-            LEFT JOIN Recruiter r ON n.RecruiterID = r.RecruiterID
-            LEFT JOIN `User` u ON r.UserID = u.UserID
-            WHERE n.ApplicationID = %s
-            ORDER BY n.Created_At DESC
+            SELECT NoteID, Note_Text, Created_At
+            FROM Note
+            WHERE ApplicationID = %s
+            ORDER BY Created_At DESC
         """, (app_id,))
-        notes = cursor.fetchall()
-        return jsonify(notes), 200
+        return jsonify(cursor.fetchall()), 200
     except Error as e:
         current_app.logger.error(f"Database error in get_notes: {e}")
         return jsonify({"error": str(e)}), 500
@@ -251,8 +232,7 @@ def get_pipeline_stats():
             GROUP BY Status
             ORDER BY count DESC
         """)
-        stats = cursor.fetchall()
-        return jsonify(stats), 200
+        return jsonify(cursor.fetchall()), 200
     except Error as e:
         current_app.logger.error(f"Database error in get_pipeline_stats: {e}")
         return jsonify({"error": str(e)}), 500
