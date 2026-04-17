@@ -121,5 +121,7 @@ for error in recent_errors:
 
 st.markdown(f'<div style="background-color: #2c2c2c; border-radius: 8px; overflow: hidden;">{rows_html}</div>', unsafe_allow_html=True)
 
+st.markdown("<br>", unsafe_allow_html=True)
+
 if st.button("View All Errors ->"):
     st.switch_page("pages/32_Error_Logs.py")
