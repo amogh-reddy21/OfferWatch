@@ -94,7 +94,10 @@ def get_errors():
     cursor = get_db().cursor(dictionary=True)
 
     try:
-        cursor.execute("""
+        status = request.args.get("status")
+        severity = request.args.get("severity")
+
+        query = """
             SELECT el.ErrorID,
                    sc.Component_Name,
                    el.Error_Type,
@@ -105,8 +108,20 @@ def get_errors():
             FROM Error_Log el
                 JOIN Service_Component sc ON el.ComponentID = sc.ComponentID
             ORDER BY el.Occurred_At DESC;
-        """)
+            WHERE 1=1
+        """
 
+        values = []
+        if status:
+            query += " AND el.Status = %s"
+            values.append(status)
+        if severity:
+            query += " AND el.Severity = %s"
+            values.append(severity)
+
+        query += " ORDER BY el.Occurred_At DESC"
+
+        cursor.execute(query, values)
         results = cursor.fetchall()
         return jsonify(results), 200
 
