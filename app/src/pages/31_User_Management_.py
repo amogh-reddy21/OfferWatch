@@ -15,6 +15,9 @@ st.markdown("""
         .stApp {
             background-color: #FAF9F6;
         }
+        [data-testid="stHeader"] {
+            background-color: #2c2c2c;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -23,7 +26,28 @@ st.write("Add, Update, or Deactivate user accounts")
 
 st.subheader("All Users")
 
-response = requests.get(f"{API_BASE}/admin/users")
+col1, col2, col3 = st.columns([2, 2, 2])
+
+role_options = ["All", "Student", "Advisor", "Recruiter", "Admin"]
+institution_options = ["All", "Northeastern University","Boston University", "University of Alberta", "Duke University"]
+status_options = ["All", "Active", "Inactive"]
+
+with col1:
+    role_filter = st.selectbox("Filter by Role", options=role_options)
+with col2:
+    institution_filter = st.selectbox("Filter by Institution", options=institution_options)
+with col3:
+    status_filter = st.selectbox("Filter by Status", options=status_options)
+
+values = {}
+if role_filter != "All":
+    values["role"] = role_filter
+if institution_filter != "All":
+    values["institution"] = institution_filter
+if status_filter != "All":
+    values["status"] = status_filter
+
+response = requests.get(f"{API_BASE}/admin/users", params=values)
 users = response.json()
 st.dataframe(users, use_container_width=True)
 
@@ -46,7 +70,8 @@ with col1:
 institution_options = {
     1: "Northeastern University", 
     2: "Boston University", 
-    3: "University of Alberta"
+    3: "University of Alberta",
+    4: "Duke University"
 }
 
 with col2:

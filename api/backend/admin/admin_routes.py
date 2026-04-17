@@ -66,7 +66,11 @@ def get_users():
     cursor = get_db().cursor(dictionary=True)
 
     try:
-        cursor.execute("""
+        status = request.args.get("status")
+        institution = request.args.get("institution")
+        role = request.args.get("role")
+
+        query = """
             SELECT u.UserID,
                    CONCAT(u.FirstName, ' ', u.LastName) AS FullName,
                    u.Email,
@@ -76,9 +80,24 @@ def get_users():
             FROM `User` u
                 JOIN Role r ON u.RoleID = r.RoleID
                 JOIN Institution i ON u.InstitutionID = i.InstitutionID
-            ORDER BY u.Created_At DESC;
-        """)
+            WHERE 1 = 1
+        """
 
+        values = []
+
+        if role:
+            query += " AND r.RoleName = %s"
+            values.append(role)
+        if institution:
+            query += " AND i.InstitutionName = %s"
+            values.append(institution)
+        if status:
+            query += " AND u.Account_Status = %s"
+            values.append(status)
+
+        query += " ORDER BY u.Created_At DESC"
+
+        cursor.execute(query, values)
         results = cursor.fetchall()
         return jsonify(results), 200
 
