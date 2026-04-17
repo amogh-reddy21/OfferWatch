@@ -12,6 +12,9 @@ API_BASE = "http://web-api:4000"
 
 st.markdown("""
     <style>
+        .stApp {
+            background-color: #FAF9F6;
+        }
         [data-testid="stMetric"] {
             background-color: #2c2c2c;
             padding: 15px 20px;
@@ -23,6 +26,7 @@ st.markdown("""
         }
         [data-testid="stMetricValue"] {
             color: white;
+            font-size: 1.5rem;
         }
     </style>
 """, unsafe_allow_html=True)
