@@ -76,7 +76,7 @@ institution_options = {
 
 with col2:
     last_name = st.text_input("Last Name")
-    institution_id = st.selectbox("Institution", options=[1, 2, 3], format_func=institution_options.get)
+    institution_id = st.selectbox("Institution", options=[1, 2, 3, 4], format_func=institution_options.get)
 
 if st.button("Add User", type="primary"):
     if first_name and last_name and email:
@@ -126,6 +126,18 @@ if st.button("Deactivate User", type="primary"):
     deactivate_result = requests.delete(f"{API_BASE}/admin/users/{deactivate_id}")
     if deactivate_result.status_code == 200:
         st.success("User deactivated successfully!")
+        st.rerun()
+    else:
+        st.error("User not found.")
+
+st.subheader("Reactivate User")
+
+reactivate_id = st.number_input("User ID to Reactivate", min_value=1, step=1)
+
+if st.button("Reactivate User", type="primary"):
+    result = requests.put(f"{API_BASE}/admin/users/{int(reactivate_id)}/reactivate")
+    if result.status_code == 200:
+        st.success("User reactivated successfully!")
         st.rerun()
     else:
         st.error("User not found.")

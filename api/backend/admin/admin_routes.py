@@ -270,6 +270,35 @@ def update_user(user_id):
     finally:
         cursor.close()
 
+@admin.route("/users/<int:user_id>/reactivate", methods=["PUT"])
+def reactivate_user(user_id):
+    cursor = get_db().cursor(dictionary=True)
+    
+    try:
+        cursor.execute("""
+                SELECT UserID 
+                FROM `User` 
+                WHERE UserID = %s;
+            """, (user_id,))
+
+        if not cursor.fetchone():
+            return jsonify({"error": "User not found"}), 404
+
+        cursor.execute("""
+                UPDATE `User`
+                SET Account_Status = 'Active', Deactivated_At = NULL
+                WHERE UserID = %s
+            """, (user_id,))
+
+        get_db().commit()
+
+        return jsonify({"message": "User reactivated successfully"}), 200
+
+    except Error as e:
+        current_app.logger.error(f'reactivate_user error: {e}')
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
 
 @admin.route("/users/<int:user_id>", methods=["DELETE"])
 def deactivate_user(user_id):
