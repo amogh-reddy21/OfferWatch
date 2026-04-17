@@ -31,3 +31,18 @@ with col1:
 
 with col2:
     severity_filter = st.selectbox("Filter by Severity", options=severity_option)
+
+values = {}
+if status_filter != "All":
+    values["status"] = status_filter
+if severity_filter != "All":
+    values["severity"] = severity_filter
+
+response = requests.get(f"{API_BASE}/admin/errors", params=values)
+errors = response.json()
+
+if errors:
+    st.dataframe(errors, use_container_width=True)
+    st.write(f"**{len(errors)} error(s) found**")
+else:
+    st.success("No errors found")

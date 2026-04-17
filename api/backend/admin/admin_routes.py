@@ -107,7 +107,6 @@ def get_errors():
                    el.Message
             FROM Error_Log el
                 JOIN Service_Component sc ON el.ComponentID = sc.ComponentID
-            ORDER BY el.Occurred_At DESC;
             WHERE 1=1
         """
 
