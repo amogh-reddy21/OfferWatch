@@ -485,3 +485,66 @@ def update_offer(offer_id):
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
+
+
+# list all notes on an application, newest first
+@alex.route("/applications/<int:app_id>/notes", methods=["GET"])
+def get_notes(app_id):
+    cursor = get_db().cursor(dictionary=True)
+    try:
+        current_app.logger.info(f"GET /alex/applications/{app_id}/notes")
+
+        cursor.execute(
+            "SELECT ApplicationID FROM Job_Application WHERE ApplicationID = %s",
+            (app_id,)
+        )
+        if not cursor.fetchone():
+            return jsonify({"error": "Application not found"}), 404
+
+        cursor.execute("""
+            SELECT NoteID, ApplicationID, Note_Text, Created_At
+            FROM Note
+            WHERE ApplicationID = %s
+            ORDER BY Created_At DESC
+        """, (app_id,))
+        return jsonify(cursor.fetchall()), 200
+    except Error as e:
+        current_app.logger.error(f"Database error in get_notes: {e}")
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+
+
+# add a note / interview prep entry to an application
+@alex.route("/applications/<int:app_id>/notes", methods=["POST"])
+def create_note(app_id):
+    cursor = get_db().cursor(dictionary=True)
+    try:
+        current_app.logger.info(f"POST /alex/applications/{app_id}/notes")
+
+        data = request.get_json()
+        if not data or "note_text" not in data:
+            return jsonify({"error": "Missing required field: note_text"}), 400
+
+        cursor.execute(
+            "SELECT ApplicationID FROM Job_Application WHERE ApplicationID = %s",
+            (app_id,)
+        )
+        if not cursor.fetchone():
+            return jsonify({"error": "Application not found"}), 404
+
+        cursor.execute("""
+            INSERT INTO Note (ApplicationID, Note_Text, Created_At)
+            VALUES (%s, %s, NOW())
+        """, (app_id, data["note_text"]))
+        get_db().commit()
+
+        return jsonify({
+            "message": "Note added successfully",
+            "note_id": cursor.lastrowid
+        }), 201
+    except Error as e:
+        current_app.logger.error(f"Database error in create_note: {e}")
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
