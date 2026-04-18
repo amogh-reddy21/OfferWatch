@@ -65,6 +65,24 @@ def classification_nav():
     )
 
 
+# ---- Role: recruiter --------------------------------------------------------
+
+def recruiter_home_nav():
+    st.sidebar.page_link("pages/40_Recruiter_Home.py", label="Recruiter Home", icon="👔")
+
+
+def candidate_pipeline_nav():
+    st.sidebar.page_link("pages/41_Candidate_Pipeline.py", label="Candidate Pipeline", icon="📋")
+
+
+def candidate_profile_nav():
+    st.sidebar.page_link("pages/42_Candidate_Profile.py", label="Candidate Profile", icon="👤")
+
+
+def pipeline_stats_nav():
+    st.sidebar.page_link("pages/43_Pipeline_Stats.py", label="Pipeline Stats", icon="📊")
+
+
 # ---- Role: administrator ----------------------------------------------------
 
 def admin_home_nav():
@@ -114,6 +132,11 @@ def SideBarLinks(show_home=False):
         if st.session_state["role"] == "administrator":
             admin_home_nav()
             ml_model_mgmt_nav()
+
+        if st.session_state["role"] == "recruiter":
+            recruiter_home_nav()
+            candidate_pipeline_nav()
+            pipeline_stats_nav()
 
     # About link appears at the bottom for all roles
     about_page_nav()
