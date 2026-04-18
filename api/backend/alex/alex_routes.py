@@ -225,3 +225,41 @@ def archive_application(app_id):
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
+        
+
+# personal funnel metrics for one student - apps, interviews, offers, conversion rates
+@alex.route("/students/<int:student_id>/funnel", methods=["GET"])
+def get_personal_funnel(student_id):
+    cursor = get_db().cursor(dictionary=True)
+    try:
+        current_app.logger.info(f"GET /alex/students/{student_id}/funnel")
+
+        cursor.execute("""
+            SELECT
+                COUNT(DISTINCT a.ApplicationID) AS total_applications,
+                COUNT(DISTINCT i.InterviewID)   AS total_interviews,
+                COUNT(DISTINCT jo.OfferID)      AS total_offers,
+                ROUND(
+                    COUNT(DISTINCT i.InterviewID) * 100.0
+                    / NULLIF(COUNT(DISTINCT a.ApplicationID), 0),
+                    2
+                ) AS application_to_interview_rate,
+                ROUND(
+                    COUNT(DISTINCT jo.OfferID) * 100.0
+                    / NULLIF(COUNT(DISTINCT i.InterviewID), 0),
+                    2
+                ) AS interview_to_offer_rate
+            FROM Job_Application a
+            LEFT JOIN Interview i  ON a.ApplicationID = i.ApplicationID
+            LEFT JOIN Job_Offer jo ON a.ApplicationID = jo.ApplicationID
+            WHERE a.StudentID = %s
+              AND a.IsArchived = FALSE
+        """, (student_id,))
+        row = cursor.fetchone()
+        row["student_id"] = student_id
+        return jsonify(row), 200
+    except Error as e:
+        current_app.logger.error(f"Database error in get_personal_funnel: {e}")
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
