@@ -1,19 +1,10 @@
 from flask import Flask
-from backend.analytics.analytics_routes import analytics
-from backend.applications.applications_routes import applications
-from backend.offers.offers_routes import offers
-from backend.reminders.reminders_routes import reminders
-from backend.recruiter.recruiter_routes import recruiter
-from backend.admin.admin_routes import admin
-from flask import Flask
 from dotenv import load_dotenv
 import os
 import logging
 
 from backend.db_connection import init_app as init_db
-from backend.simple.simple_routes import simple_routes
-from backend.ngos.ngo_routes import ngos
-
+from backend.analytics.analytics_routes import analytics
 
 
 def create_app():
@@ -35,13 +26,6 @@ def create_app():
     init_db(app)
 
     app.logger.info("create_app(): registering blueprints")
-    app.register_blueprint(simple_routes)
-    app.register_blueprint(ngos, url_prefix="/ngo")
     app.register_blueprint(analytics)
-    app.register_blueprint(applications)
-    app.register_blueprint(offers)
-    app.register_blueprint(reminders)
-    app.register_blueprint(recruiter)
-    app.register_blueprint(admin)
 
     return app
