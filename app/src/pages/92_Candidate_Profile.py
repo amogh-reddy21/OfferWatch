@@ -33,7 +33,7 @@ if not profile:
     st.error("Could not load candidate profile.")
     st.stop()
 
-# --- Layout: left = info + stage, right = notes ---
+# Layout: left = info + stage, right = notes 
 left, right = st.columns([1, 1])
 
 with left:

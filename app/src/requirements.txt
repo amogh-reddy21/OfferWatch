@@ -7,5 +7,5 @@ matplotlib
 numpy
 pydeck
 requests
-plotly
+plotl
 scikit-learn

@@ -12,7 +12,7 @@ SideBarLinks()
 API_BASE = "http://web-api:4000/rec"
 
 st.title("Pipeline Stats")
-st.write("Breakdown of candidates by hiring stage across all active applications.")
+st.write("Breakdown of Candidate by Hiring stage Across All Active Applications.")
 
 if st.button("← Back to Home"):
     st.switch_page("pages/90_Recruiter_Home.py")

@@ -16,7 +16,7 @@ st.title("Candidate Pipeline")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    name_search = st.text_input("Search by name")
+    name_search = st.text_input("Search by Name")
 with col2:
     university_filter = st.text_input("Filter by University")
 with col3:
