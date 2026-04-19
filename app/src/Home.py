@@ -45,6 +45,20 @@ with col1:
         st.session_state['first_name'] = 'Lisa'
         logger.info("Logging in as Analyst persona")
         st.switch_page('pages/10_Analyst_Home.py')
+       
+    # Persona 5: Dr. Maria Patel — University Career Advisor
+    # Logs in as Maria, a career advisor at Northeastern University who oversees
+    # 100+ students in their co-op/internship search. Grants access to the
+    # advisor dashboard, flagged student tracker, and industry analytics pages.
+    if st.button('Act as Dr. Maria Patel, University Career Advisor',
+                 type='primary',
+                 use_container_width=True):
+        st.session_state['authenticated'] = True
+        st.session_state['role'] = 'career_advisor'
+        st.session_state['first_name'] = 'Maria'
+        st.session_state['advisor_id'] = 1
+        logger.info("Logging in as Career Advisor Persona")
+        st.switch_page('pages/40_Advisor_Home.py')
 
 with col2:
     if st.button("Act as Reece James, Recruiter", type="primary", use_container_width=True):
@@ -60,5 +74,5 @@ with col2:
         st.session_state['first_name'] = 'Evan'
         logger.info("Logging in as Admin persona")
         st.switch_page('pages/30_Admin_Dashboard.py')
-        
-
+       
+ 

@@ -173,6 +173,25 @@ def offers_nav():
         "pages/43_Offers.py", label="Compare Offers", icon="💼"
     )
 
+# ---- Role: career_advisor ---------------------------------------------------
+ 
+def advisor_home_nav():
+    st.sidebar.page_link(
+        "pages/40_Advisor_Home.py", label="Application Dashboard", icon="📊"
+    )
+ 
+ 
+def advisor_flagged_nav():
+    st.sidebar.page_link(
+        "pages/42_Flagged_Students.py", label="Flagged Students", icon="🚩"
+    )
+ 
+ 
+def advisor_industry_nav():
+    st.sidebar.page_link(
+        "pages/41_Industry_Dashboard.py", label="Industry Dashboard", icon="🏭"
+    )
+
 
 # ---- Sidebar Builder ----------------------------------------------------
 
@@ -215,6 +234,13 @@ def SideBarLinks(show_home=False):
             recruiter_home_nav()
             candidate_pipeline_nav()
             pipeline_stats_nav()
+
+        # Navigating to the three screens created for the persona
+        if st.session_state["role"] == "career_advisor":
+            advisor_home_nav()
+            advisor_flagged_nav()
+            advisor_industry_nav()
+
 
     about_page_nav()
 
