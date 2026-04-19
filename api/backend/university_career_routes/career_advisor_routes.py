@@ -85,8 +85,8 @@ def get_resume_success_rates(advisor_id):
                 COUNT(DISTINCT ja.ApplicationID)  AS Applications,
                 COUNT(DISTINCT i.InterviewID)     AS Interviews,
                 ROUND(
-                    COUNT(DISTINCT i.InterviewID) * 100.0
-                    / NULLIF(COUNT(DISTINCT ja.ApplicationID), 0), 2
+                    LEAST(COUNT(DISTINCT i.InterviewID) * 100.0
+                    / NULLIF(COUNT(DISTINCT ja.ApplicationID), 0),100), 2
                 ) AS InterviewRate
             FROM Resume r
             JOIN Student s          ON r.StudentID       = s.StudentID
