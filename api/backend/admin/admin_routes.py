@@ -308,7 +308,7 @@ def reactivate_user(user_id):
     finally:
         cursor.close()
 
-# Soft deltes an account. Basically it deactivates teh account and make it inactive
+# Soft deletes an account. Basically it deactivates the account and make it inactive
 @admin.route("/users/<int:user_id>", methods=["DELETE"])
 def deactivate_user(user_id):
     cursor = get_db().cursor(dictionary=True)
