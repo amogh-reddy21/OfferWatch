@@ -76,6 +76,25 @@ def ml_model_mgmt_nav():
         "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
     )
 
+# ---- Role: career_advisor ---------------------------------------------------
+ 
+def advisor_home_nav():
+    st.sidebar.page_link(
+        "pages/40_Advisor_Home.py", label="Application Dashboard", icon="📊"
+    )
+ 
+ 
+def advisor_flagged_nav():
+    st.sidebar.page_link(
+        "pages/42_Flagged_Students.py", label="Flagged Students", icon="🚩"
+    )
+ 
+ 
+def advisor_industry_nav():
+    st.sidebar.page_link(
+        "pages/41_Industry_Dashboard.py", label="Industry Dashboard", icon="🏭"
+    )
+
 
 # ---- Sidebar assembly -------------------------------------------------------
 
@@ -114,6 +133,13 @@ def SideBarLinks(show_home=False):
         if st.session_state["role"] == "administrator":
             admin_home_nav()
             ml_model_mgmt_nav()
+
+        # Navigating to the three screens created for the persona
+        if st.session_state["role"] == "career_advisor":
+            advisor_home_nav()
+            advisor_flagged_nav()
+            advisor_industry_nav()
+
 
     # About link appears at the bottom for all roles
     about_page_nav()
