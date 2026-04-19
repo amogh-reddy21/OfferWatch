@@ -29,7 +29,7 @@ def create_app():
     init_db(app)
 
     app.logger.info("create_app(): registering blueprints")
-
+    
     app.register_blueprint(analytics)
     app.register_blueprint(simple_routes)
     app.register_blueprint(recruiters, url_prefix="/rec")

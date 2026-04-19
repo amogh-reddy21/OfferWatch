@@ -125,11 +125,10 @@ def pipeline_stats_nav():
     st.sidebar.page_link("pages/93_Pipeline_Stats.py", label="Pipeline Stats", icon="📊")
 
 
-# ---- Role: administrator ----------------------------------------------------
+# ---- Role: Administrator -----------------------------------------------
 
 # def admin_home_nav():
-#     st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
-
+#     st.sidebar.page_link("pages/30_Admin_Home.py", label="Admin Home", icon="🖥️")
 
 # def ml_model_mgmt_nav():
 #     st.sidebar.page_link(
@@ -175,15 +174,9 @@ def offers_nav():
     )
 
 
-# ---- Sidebar assembly -------------------------------------------------------
+# ---- Sidebar Builder ----------------------------------------------------
 
 def SideBarLinks(show_home=False):
-    """
-    Renders sidebar navigation links based on the logged-in user's role.
-    The role is stored in st.session_state when the user logs in on Home.py.
-    """
-
-    # Logo appears at the top of the sidebar on every page
     # st.sidebar.image("assets/logo.png", width=150)
     if "authenticated" in st.session_state and st.session_state.get("role") == "administrator":
         st.sidebar.image("assets/OfferWatchAdminLogo.png", width=150)
