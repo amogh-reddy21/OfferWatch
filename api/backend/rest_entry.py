@@ -4,16 +4,18 @@ import os
 import logging
 
 from backend.db_connection import init_app as init_db
+from backend.analytics.analytics_routes import analytics
 from backend.simple.simple_routes import simple_routes
-from backend.ngos.ngo_routes import ngos
 from backend.university_career_routes.career_advisor_routes import advisor_routes 
-
+from backend.recruiters.recruiter_routes import recruiters
+from backend.admin.admin_routes import admin
+from backend.alex.alex_routes import alex
 
 def create_app():
     app = Flask(__name__)
 
     app.logger.setLevel(logging.DEBUG)
-    app.logger.info('API startup')
+    app.logger.info("API startup")
 
     load_dotenv()
 
@@ -28,8 +30,12 @@ def create_app():
     init_db(app)
 
     app.logger.info("create_app(): registering blueprints")
+    
+    app.register_blueprint(analytics)
     app.register_blueprint(simple_routes)
-    app.register_blueprint(ngos, url_prefix="/ngo")
     app.register_blueprint(advisor_routes, url_prefix="/advisor")  
+    app.register_blueprint(recruiters, url_prefix="/rec")
+    app.register_blueprint(admin, url_prefix="/admin")
+    app.register_blueprint(alex, url_prefix="/alex")
 
     return app
