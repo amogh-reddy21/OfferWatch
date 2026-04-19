@@ -84,3 +84,4 @@ if st.button("Act as Evan Carter, a System Administrator",
     st.session_state['first_name'] = 'Evan'
     st.session_state['user_id'] = 41
     st.switch_page('pages/30_Admin_Dashboard.py')
+    
