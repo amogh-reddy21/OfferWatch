@@ -11,8 +11,8 @@ st.title(f"Welcome, {st.session_state['first_name']}!")
 st.write("### What would you like to do today?")
 
 if st.button('Candidate Pipeline', type='primary', use_container_width=True):
-    st.switch_page('pages/41_Candidate_Pipeline.py')
+    st.switch_page('pages/91_Candidate_Pipeline.py')
 
 if st.button('Pipeline Stats', type='primary', use_container_width=True):
-    st.switch_page('pages/43_Pipeline_Stats.py')
+    st.switch_page('pages/93_Pipeline_Stats.py')
 

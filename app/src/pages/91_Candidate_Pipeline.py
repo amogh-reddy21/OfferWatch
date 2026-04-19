@@ -66,4 +66,4 @@ for c in candidates:
     if row[5].button("View", key=f"view_{c['ApplicationID']}"):
         st.session_state["selected_student_id"] = c["StudentID"]
         st.session_state["selected_application_id"] = c["ApplicationID"]
-        st.switch_page("pages/42_Candidate_Profile.py")
+        st.switch_page("pages/92_Candidate_Profile.py")

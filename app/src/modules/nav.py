@@ -68,19 +68,19 @@ def classification_nav():
 # ---- Role: recruiter --------------------------------------------------------
 
 def recruiter_home_nav():
-    st.sidebar.page_link("pages/40_Recruiter_Home.py", label="Recruiter Home", icon="👔")
+    st.sidebar.page_link("pages/90_Recruiter_Home.py", label="Recruiter Home", icon="👔")
 
 
 def candidate_pipeline_nav():
-    st.sidebar.page_link("pages/41_Candidate_Pipeline.py", label="Candidate Pipeline", icon="📋")
+    st.sidebar.page_link("pages/91_Candidate_Pipeline.py", label="Candidate Pipeline", icon="📋")
 
 
 def candidate_profile_nav():
-    st.sidebar.page_link("pages/42_Candidate_Profile.py", label="Candidate Profile", icon="👤")
+    st.sidebar.page_link("pages/92_Candidate_Profile.py", label="Candidate Profile", icon="👤")
 
 
 def pipeline_stats_nav():
-    st.sidebar.page_link("pages/43_Pipeline_Stats.py", label="Pipeline Stats", icon="📊")
+    st.sidebar.page_link("pages/93_Pipeline_Stats.py", label="Pipeline Stats", icon="📊")
 
 
 # ---- Role: administrator ----------------------------------------------------

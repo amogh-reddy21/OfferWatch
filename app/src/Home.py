@@ -78,4 +78,4 @@ if st.button('Act as Reece James, a Recruiter',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'recruiter'
     st.session_state['first_name'] = 'Reece'
-    st.switch_page('pages/40_Recruiter_Home.py')
+    st.switch_page('pages/90_Recruiter_Home.py')

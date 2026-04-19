@@ -13,14 +13,14 @@ API_BASE = "http://web-api:4000/rec"
 if "selected_student_id" not in st.session_state:
     st.error("No candidate selected. Go back to the pipeline.")
     if st.button("Back to Pipeline"):
-        st.switch_page("pages/41_Candidate_Pipeline.py")
+        st.switch_page("pages/91_Candidate_Pipeline.py")
     st.stop()
 
 student_id = st.session_state["selected_student_id"]
 app_id = st.session_state["selected_application_id"]
 
 if st.button("← Back to Pipeline"):
-    st.switch_page("pages/41_Candidate_Pipeline.py")
+    st.switch_page("pages/91_Candidate_Pipeline.py")
 
 # Fetch candidate profile 
 try:

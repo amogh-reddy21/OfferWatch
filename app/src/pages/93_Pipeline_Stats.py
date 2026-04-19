@@ -15,7 +15,7 @@ st.title("Pipeline Stats")
 st.write("Breakdown of candidates by hiring stage across all active applications.")
 
 if st.button("← Back to Home"):
-    st.switch_page("pages/40_Recruiter_Home.py")
+    st.switch_page("pages/90_Recruiter_Home.py")
 
 st.divider()
 
