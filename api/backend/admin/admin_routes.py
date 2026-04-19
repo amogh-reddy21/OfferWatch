@@ -342,7 +342,8 @@ def deactivate_user(user_id):
         cursor.close()
 
 # Permanently deletes all archived job applications older than 2 years from the database.
-# This action cannot be undone@admin.route("/data-cleanup", methods=["DELETE"])
+# This action cannot be undone
+@admin.route("/data-cleanup", methods=["DELETE"])
 def delete_outdated_records():
     cursor = get_db().cursor(dictionary=True)
 
