@@ -4,6 +4,8 @@ from mysql.connector import Error
 
 admin = Blueprint("admin", __name__)
 
+# Returns teh platforms health data including the active users count
+# This incldes API response time, error count in last 24 hours, uptime, and the status of each service component
 @admin.route("/health", methods=["GET"])
 def get_health():
     cursor = get_db().cursor(dictionary=True)
@@ -61,6 +63,8 @@ def get_health():
         cursor.close()
 
 
+# Returns a list of all the users with their name, email, role, institution, and account status
+# Optionally, it also lets you filter for role, institution, and status through paramertes
 @admin.route("/users", methods=["GET"])
 def get_users():
     cursor = get_db().cursor(dictionary=True)
@@ -108,6 +112,8 @@ def get_users():
         cursor.close()
 
 
+# Returns a list of error logs with the component name, error type, severity, status, and when it occured.
+# Optionally, filters for status and severity through parmaeters
 @admin.route("/errors", methods=["GET"])
 def get_errors():
     cursor = get_db().cursor(dictionary=True)
@@ -149,7 +155,8 @@ def get_errors():
     finally:
         cursor.close()
 
-
+# Return a list of the outdated/archived job applications that are flagged for cleanup
+# Shows the student name, position, employer, date, and status
 @admin.route("/data-cleanup", methods=["GET"])
 def get_outdated_records():
     cursor = get_db().cursor(dictionary=True)
@@ -181,7 +188,7 @@ def get_outdated_records():
     finally:
         cursor.close()
 
-
+# Creates a new user account witht eh provided first name, last name, email, role, and institutuion. Sets it to active automatically
 @admin.route("/users", methods=["POST"])
 def create_user():
     cursor = get_db().cursor(dictionary=True)
@@ -219,7 +226,7 @@ def create_user():
     finally:
         cursor.close()
 
-
+# Updates a existing users role or institution based on teh provided user id. 
 @admin.route("/users/<int:user_id>", methods=["PUT"])
 def update_user(user_id):
     cursor = get_db().cursor(dictionary=True)
@@ -270,6 +277,7 @@ def update_user(user_id):
     finally:
         cursor.close()
 
+# Reactivates a users account that is currently deactivated
 @admin.route("/users/<int:user_id>/reactivate", methods=["PUT"])
 def reactivate_user(user_id):
     cursor = get_db().cursor(dictionary=True)
@@ -300,6 +308,7 @@ def reactivate_user(user_id):
     finally:
         cursor.close()
 
+# Soft deltes an account. Basically it deactivates teh account and make it inactive
 @admin.route("/users/<int:user_id>", methods=["DELETE"])
 def deactivate_user(user_id):
     cursor = get_db().cursor(dictionary=True)
@@ -332,8 +341,8 @@ def deactivate_user(user_id):
     finally:
         cursor.close()
 
-
-@admin.route("/data-cleanup", methods=["DELETE"])
+# Permanently deletes all archived job applications older than 2 years from the database.
+# This action cannot be undone@admin.route("/data-cleanup", methods=["DELETE"])
 def delete_outdated_records():
     cursor = get_db().cursor(dictionary=True)
 
