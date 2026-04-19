@@ -10,7 +10,6 @@ from backend.recruiters.recruiter_routes import recruiters
 from backend.admin.admin_routes import admin
 from backend.alex.alex_routes import alex
 
-
 def create_app():
     app = Flask(__name__)
 
