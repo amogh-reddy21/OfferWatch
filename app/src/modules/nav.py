@@ -1,125 +1,117 @@
-# Idea borrowed from https://github.com/fsmosca/sample-streamlit-authenticator
-
-# This file has functions to add links to the left sidebar based on the user's role.
-
 import streamlit as st
 
-
-# ---- General ----------------------------------------------------------------
+# ---- General ------------------------------------------------------------
 
 def home_nav():
     st.sidebar.page_link("Home.py", label="Home", icon="🏠")
 
-
 def about_page_nav():
-    st.sidebar.page_link("pages/30_About.py", label="About", icon="🧠")
+    st.sidebar.page_link("pages/99_About.py", label="About", icon="🧠")
 
 
-# ---- Role: pol_strat_advisor ------------------------------------------------
+# ---- Role: Student ------------------------------------------------------
 
-def pol_strat_home_nav():
-    st.sidebar.page_link(
-        "pages/00_Pol_Strat_Home.py", label="Political Strategist Home", icon="👤"
-    )
+def student_home_nav():
+    st.sidebar.page_link("pages/00_Student_Home.py", label="Student Home", icon="🎓")
 
+def student_applications_nav():
+    st.sidebar.page_link("pages/01_Student_Applications.py", label="Student Applications", icon="📄")
 
-def world_bank_viz_nav():
-    st.sidebar.page_link(
-        "pages/01_World_Bank_Viz.py", label="World Bank Visualization", icon="🏦"
-    )
+def student_offers_nav():
+    st.sidebar.page_link("pages/02_Student_Offers.py", label="Student Offers", icon="💼")
 
-
-def map_demo_nav():
-    st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon="🗺️")
+def student_reminders_nav():
+    st.sidebar.page_link("pages/03_Student_Reminders.py", label="Student Reminders", icon="⏰")
 
 
-# ---- Role: usaid_worker -----------------------------------------------------
+# ---- Role: Analyst ------------------------------------------------------
 
-def usaid_worker_home_nav():
-    st.sidebar.page_link(
-        "pages/10_USAID_Worker_Home.py", label="USAID Worker Home", icon="🏠"
-    )
+def analyst_home_nav():
+    st.sidebar.page_link("pages/10_Analyst_Home.py", label="Analyst Home", icon="📊")
 
+def analytics_dashboard_nav():
+    st.sidebar.page_link("pages/17_Analytics_Dashboard.py", label="Analytics Dashboard", icon="📈")
 
-def ngo_directory_nav():
-    st.sidebar.page_link("pages/14_NGO_Directory.py", label="NGO Directory", icon="📁")
+def trends_nav():
+    st.sidebar.page_link("pages/12_Trends.py", label="Trends", icon="📉")
 
-
-def add_ngo_nav():
-    st.sidebar.page_link("pages/15_Add_NGO.py", label="Add New NGO", icon="➕")
-
-
-def prediction_nav():
-    st.sidebar.page_link(
-        "pages/11_Prediction.py", label="Regression Prediction", icon="📈"
-    )
+def salary_nav():
+    st.sidebar.page_link("pages/13_Salary_Insights.py", label="Salary Insights", icon="💰")
 
 
-def api_test_nav():
-    st.sidebar.page_link("pages/12_API_Test.py", label="Test the API", icon="🛜")
+# ---- Role: Recruiter ----------------------------------------------------
+
+def recruiter_home_nav():
+    st.sidebar.page_link("pages/20_Recruiter_Home.py", label="Recruiter Home", icon="🤝")
+
+def candidates_nav():
+    st.sidebar.page_link("pages/21_Candidates.py", label="Candidates", icon="🧑‍💼")
+
+def candidate_profile_nav():
+    st.sidebar.page_link("pages/22_Candidate_Profile.py", label="Candidate Profile", icon="👤")
+
+def recruiter_notes_nav():
+    st.sidebar.page_link("pages/23_Recruiter_Notes.py", label="Recruiter Notes", icon="📝")
 
 
-def classification_nav():
-    st.sidebar.page_link(
-        "pages/13_Classification.py", label="Classification Demo", icon="🌺"
-    )
-
-
-# ---- Role: administrator ----------------------------------------------------
+# ---- Role: Administrator -----------------------------------------------
 
 def admin_home_nav():
-    st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
+    st.sidebar.page_link("pages/30_Admin_Home.py", label="Admin Home", icon="🖥️")
+
+def system_logs_nav():
+    st.sidebar.page_link("pages/31_System_Logs.py", label="System Logs", icon="📋")
+
+def health_metrics_nav():
+    st.sidebar.page_link("pages/32_Health_Metrics.py", label="Health Metrics", icon="❤️")
+
+def user_management_nav():
+    st.sidebar.page_link("pages/33_User_Management.py", label="User Management", icon="👥")
 
 
-def ml_model_mgmt_nav():
-    st.sidebar.page_link(
-        "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
-    )
-
-
-# ---- Sidebar assembly -------------------------------------------------------
+# ---- Sidebar Builder ----------------------------------------------------
 
 def SideBarLinks(show_home=False):
-    """
-    Renders sidebar navigation links based on the logged-in user's role.
-    The role is stored in st.session_state when the user logs in on Home.py.
-    """
-
-    # Logo appears at the top of the sidebar on every page
     st.sidebar.image("assets/logo.png", width=150)
 
-    # If no one is logged in, send them to the Home (login) page
     if "authenticated" not in st.session_state:
-        st.session_state.authenticated = False
-        st.switch_page("Home.py")
+        st.session_state["authenticated"] = False
 
     if show_home:
         home_nav()
 
-    if st.session_state["authenticated"]:
+    if not st.session_state["authenticated"]:
+        about_page_nav()
+        return
 
-        if st.session_state["role"] == "pol_strat_advisor":
-            pol_strat_home_nav()
-            world_bank_viz_nav()
-            map_demo_nav()
+    role = st.session_state.get("role", "")
 
-        if st.session_state["role"] == "usaid_worker":
-            usaid_worker_home_nav()
-            ngo_directory_nav()
-            add_ngo_nav()
-            prediction_nav()
-            api_test_nav()
-            classification_nav()
+    if role == "student":
+        student_home_nav()
+        student_applications_nav()
+        student_offers_nav()
+        student_reminders_nav()
 
-        if st.session_state["role"] == "administrator":
-            admin_home_nav()
-            ml_model_mgmt_nav()
+    elif role == "analyst":
+        analyst_home_nav()
+        analytics_dashboard_nav()
+        trends_nav()
+        salary_nav()
 
-    # About link appears at the bottom for all roles
+    elif role == "recruiter":
+        recruiter_home_nav()
+        candidates_nav()
+        candidate_profile_nav()
+        recruiter_notes_nav()
+
+    elif role == "administrator":
+        admin_home_nav()
+        system_logs_nav()
+        health_metrics_nav()
+        user_management_nav()
+
     about_page_nav()
 
-    if st.session_state["authenticated"]:
-        if st.sidebar.button("Logout"):
-            del st.session_state["role"]
-            del st.session_state["authenticated"]
-            st.switch_page("Home.py")
+    if st.sidebar.button("Logout", key=f"logout_{role or 'guest'}"):
+        st.session_state.clear()
+        st.switch_page("Home.py")
