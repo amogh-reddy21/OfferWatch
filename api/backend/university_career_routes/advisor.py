@@ -4,10 +4,8 @@ from db import db
 advisor_routes = Blueprint('advisor_routes', __name__, url_prefix='/advisor')
 
 
-# -----------------------------------------------------------------------
 # GET  /advisor/<advisor_id>/dashboard
 # US1 — Cohort-wide Applied → Interview → Offer conversion rates
-# -----------------------------------------------------------------------
 @advisor_routes.route('/<int:advisor_id>/dashboard', methods=['GET'])
 def get_cohort_dashboard(advisor_id):
     cursor = db.get_db()
@@ -37,10 +35,8 @@ def get_cohort_dashboard(advisor_id):
     return jsonify(row), 200
 
 
-# -----------------------------------------------------------------------
 # GET  /advisor/<advisor_id>/students/flagged
 # US2 — Students inactive for 14+ days or with zero applications
-# -----------------------------------------------------------------------
 @advisor_routes.route('/<int:advisor_id>/students/flagged', methods=['GET'])
 def get_flagged_students(advisor_id):
     cursor = db.get_db()
@@ -61,10 +57,8 @@ def get_flagged_students(advisor_id):
     return jsonify(cursor.fetchall()), 200
 
 
-# -----------------------------------------------------------------------
 # GET  /advisor/<advisor_id>/resumes/success-rates
 # US3 — Resume version × industry interview conversion rates
-# -----------------------------------------------------------------------
 @advisor_routes.route('/<int:advisor_id>/resumes/success-rates', methods=['GET'])
 def get_resume_success_rates(advisor_id):
     cursor = db.get_db()
@@ -92,10 +86,8 @@ def get_resume_success_rates(advisor_id):
     return jsonify(cursor.fetchall()), 200
 
 
-# -----------------------------------------------------------------------
 # GET  /advisor/<advisor_id>/employers/top-offers
 # US4 — Companies and industries ranked by offers extended to cohort
-# -----------------------------------------------------------------------
 @advisor_routes.route('/<int:advisor_id>/employers/top-offers', methods=['GET'])
 def get_top_offer_employers(advisor_id):
     cursor = db.get_db()
@@ -118,10 +110,8 @@ def get_top_offer_employers(advisor_id):
     return jsonify(cursor.fetchall()), 200
 
 
-# -----------------------------------------------------------------------
 # GET  /advisor/<advisor_id>/analytics/placement
 # US5 — Year-over-year placements and average time-to-offer
-# -----------------------------------------------------------------------
 @advisor_routes.route('/<int:advisor_id>/analytics/placement', methods=['GET'])
 def get_yoy_placement(advisor_id):
     cursor = db.get_db()
@@ -143,10 +133,8 @@ def get_yoy_placement(advisor_id):
     return jsonify(cursor.fetchall()), 200
 
 
-# -----------------------------------------------------------------------
 # GET  /advisor/<advisor_id>/students/<student_id>/applications
 # US6 — Full application log for one student with interviews + offers
-# -----------------------------------------------------------------------
 @advisor_routes.route('/<int:advisor_id>/students/<int:student_id>/applications',
                       methods=['GET'])
 def get_student_application_log(advisor_id, student_id):
@@ -183,10 +171,8 @@ def get_student_application_log(advisor_id, student_id):
     return jsonify(cursor.fetchall()), 200
 
 
-# -----------------------------------------------------------------------
 # GET  /advisor/<advisor_id>/students/<student_id>/applications/<app_id>/notes
 # US6 — Return all coaching notes on a specific application
-# -----------------------------------------------------------------------
 @advisor_routes.route(
     '/<int:advisor_id>/students/<int:student_id>/applications/<int:app_id>/notes',
     methods=['GET']
@@ -206,11 +192,8 @@ def get_application_notes(advisor_id, student_id, app_id):
     return jsonify(cursor.fetchall()), 200
 
 
-# -----------------------------------------------------------------------
 # POST /advisor/<advisor_id>/students/<student_id>/applications/<app_id>/notes
-# US6 — Advisor adds a coaching note to an application
-# Body: { "note_text": "..." }
-# -----------------------------------------------------------------------
+# US6 — Advisor adds a coaching note to an application. The Body: { "note_text": "..." }
 @advisor_routes.route(
     '/<int:advisor_id>/students/<int:student_id>/applications/<int:app_id>/notes',
     methods=['POST']
@@ -238,11 +221,8 @@ def add_application_note(advisor_id, student_id, app_id):
     return jsonify({"message": "Note added.", "NoteID": cursor.lastrowid}), 201
 
 
-# -----------------------------------------------------------------------
 # PUT  /advisor/<advisor_id>/students/<student_id>/applications/<app_id>/status
-# US6 — Advisor corrects an application's status or notes field
-# Body: { "status": "...", "notes": "..." }  (at least one required)
-# -----------------------------------------------------------------------
+# US6 — Advisor corrects an application's status or notes field. The Body: { "status": "...", "notes": "..." }  (at least one required)
 @advisor_routes.route(
     '/<int:advisor_id>/students/<int:student_id>/applications/<int:app_id>/status',
     methods=['PUT']
@@ -280,12 +260,9 @@ def update_application_status(advisor_id, student_id, app_id):
     db.get_db().commit()
     return jsonify({"message": "Application updated."}), 200
 
-
-# -----------------------------------------------------------------------
 # PUT  /advisor/<advisor_id>/notes/<note_id>
 # US6 — Advisor edits the text of an existing coaching note
 # Body: { "note_text": "..." }
-# -----------------------------------------------------------------------
 @advisor_routes.route('/<int:advisor_id>/notes/<int:note_id>', methods=['PUT'])
 def update_note(advisor_id, note_id):
     body = request.get_json(force=True)
@@ -311,10 +288,9 @@ def update_note(advisor_id, note_id):
     return jsonify({"message": "Note updated."}), 200
 
 
-# -----------------------------------------------------------------------
+
 # DELETE /advisor/<advisor_id>/notes/<note_id>
 # US6 — Advisor removes a coaching note (verifies ownership first)
-# -----------------------------------------------------------------------
 @advisor_routes.route('/<int:advisor_id>/notes/<int:note_id>', methods=['DELETE'])
 def delete_note(advisor_id, note_id):
     cursor = db.get_db()
