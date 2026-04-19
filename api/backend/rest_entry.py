@@ -6,7 +6,7 @@ import logging
 from backend.db_connection import init_app as init_db
 from backend.simple.simple_routes import simple_routes
 from backend.ngos.ngo_routes import ngos
-from backend.university_career_routes.career_advisor_routes import advisor_routes  # ← add this
+from backend.university_career_routes.career_advisor_routes import advisor_routes 
 
 
 def create_app():
@@ -30,5 +30,6 @@ def create_app():
     app.logger.info("create_app(): registering blueprints")
     app.register_blueprint(simple_routes)
     app.register_blueprint(ngos, url_prefix="/ngo")
+    app.register_blueprint(advisor_routes, url_prefix="/advisor")  
 
     return app
