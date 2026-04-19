@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 # import the main streamlit library as well
 # as SideBarLinks function from src/modules folder
 import streamlit as st
+import requests
 from modules.nav import SideBarLinks
 
 # streamlit supports regular and wide layout (how the controls
@@ -70,7 +71,7 @@ if st.button('Act as System Administrator',
     st.session_state['role'] = 'administrator'
     st.session_state['first_name'] = 'SysAdmin'
     st.switch_page('pages/30_Admin_Dashboard.py')
-  
+
 if st.button('Act as Reece James, a Recruiter',
              type='primary',
              use_container_width=True):
