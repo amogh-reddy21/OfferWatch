@@ -5,6 +5,7 @@ import logging
 
 from backend.db_connection import init_app as init_db
 from backend.analytics.analytics_routes import analytics
+from backend.simple.simple_routes import simple_routes
 from backend.recruiters.recruiter_routes import recruiters
 from backend.admin.admin_routes import admin
 from backend.alex.alex_routes import alex
@@ -28,7 +29,9 @@ def create_app():
     init_db(app)
 
     app.logger.info("create_app(): registering blueprints")
+    
     app.register_blueprint(analytics)
+    app.register_blueprint(simple_routes)
     app.register_blueprint(recruiters, url_prefix="/rec")
     app.register_blueprint(admin, url_prefix="/admin")
     app.register_blueprint(alex, url_prefix="/alex")

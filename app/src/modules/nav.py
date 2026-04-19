@@ -2,8 +2,6 @@ import streamlit as st
 
 # ---- General ------------------------------------------------------------
 
-# ---- General ----------------------------------------------------------------
-
 def home_nav():
     st.sidebar.page_link("Home.py", label="Home", icon="🏠")
 
@@ -13,22 +11,70 @@ def about_page_nav():
 
 # ---- Role: Student ------------------------------------------------------
 
-def pol_strat_home_nav():
-    st.sidebar.page_link(
-        "pages/00_Pol_Strat_Home.py", label="Political Strategist Home", icon="👤"
-    )
+def student_home_nav():
+    st.sidebar.page_link("pages/00_Student_Home.py", label="Student Home", icon="🎓")
+
+def student_applications_nav():
+    st.sidebar.page_link("pages/01_Student_Applications.py", label="Student Applications", icon="📄")
+
+def student_offers_nav():
+    st.sidebar.page_link("pages/02_Student_Offers.py", label="Student Offers", icon="💼")
+
+def student_reminders_nav():
+    st.sidebar.page_link("pages/03_Student_Reminders.py", label="Student Reminders", icon="⏰")
 
 
-def world_bank_viz_nav():
-    st.sidebar.page_link(
-        "pages/01_World_Bank_Viz.py", label="World Bank Visualization", icon="🏦"
-    )
+# ---- Role: Analyst ------------------------------------------------------
+
+def analyst_home_nav():
+    st.sidebar.page_link("pages/10_Analyst_Home.py", label="Analyst Home", icon="📊")
+
+def analytics_dashboard_nav():
+    st.sidebar.page_link("pages/17_Analytics_Dashboard.py", label="Analytics Dashboard", icon="📈")
+
+def trends_nav():
+    st.sidebar.page_link("pages/12_Trends.py", label="Trends", icon="📉")
+
+def salary_nav():
+    st.sidebar.page_link("pages/13_Salary_Insights.py", label="Salary Insights", icon="💰")
 
 
-def map_demo_nav():
-    st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon="🗺️")
+# ---- Role: Recruiter ----------------------------------------------------
+
+def recruiter_home_nav():
+    st.sidebar.page_link("pages/20_Recruiter_Home.py", label="Recruiter Home", icon="🤝")
+
+def candidates_nav():
+    st.sidebar.page_link("pages/21_Candidates.py", label="Candidates", icon="🧑‍💼")
+
+def candidate_profile_nav():
+    st.sidebar.page_link("pages/22_Candidate_Profile.py", label="Candidate Profile", icon="👤")
+
+def recruiter_notes_nav():
+    st.sidebar.page_link("pages/23_Recruiter_Notes.py", label="Recruiter Notes", icon="📝")
 
 
+# <<<<<<< HEAD
+# # ---- Role: Administrator -----------------------------------------------
+
+# def admin_home_nav():
+#     st.sidebar.page_link("pages/30_Admin_Home.py", label="Admin Home", icon="🖥️")
+
+# def system_logs_nav():
+#     st.sidebar.page_link("pages/31_System_Logs.py", label="System Logs", icon="📋")
+
+# def health_metrics_nav():
+#     st.sidebar.page_link("pages/32_Health_Metrics.py", label="Health Metrics", icon="❤️")
+
+# def user_management_nav():
+#     st.sidebar.page_link("pages/33_User_Management.py", label="User Management", icon="👥")
+
+
+# # ---- Sidebar Builder ----------------------------------------------------
+
+# def SideBarLinks(show_home=False):
+#     st.sidebar.image("assets/logo.png", width=150)
+# =======
 # ---- Role: usaid_worker -----------------------------------------------------
 
 def usaid_worker_home_nav():
@@ -139,24 +185,19 @@ def SideBarLinks(show_home=False):
 
     if "authenticated" not in st.session_state:
         st.session_state["authenticated"] = False
+        st.switch_page("Home.py")
 
     if show_home:
         home_nav()
 
+
     if st.session_state["authenticated"]:
 
-        if st.session_state["role"] == "pol_strat_advisor":
-            pol_strat_home_nav()
-            world_bank_viz_nav()
-            map_demo_nav()
-
-        if st.session_state["role"] == "usaid_worker":
-            usaid_worker_home_nav()
-            ngo_directory_nav()
-            add_ngo_nav()
-            prediction_nav()
-            api_test_nav()
-            classification_nav()
+        if st.session_state["role"] == "analyst":
+            analyst_home_nav()
+            analytics_dashboard_nav()
+            trends_nav()
+            salary_nav()
 
         if st.session_state["role"] == "administrator":
             admin_dashboard_nav()
@@ -177,6 +218,8 @@ def SideBarLinks(show_home=False):
 
     about_page_nav()
 
-    if st.sidebar.button("Logout", key=f"logout_{role or 'guest'}"):
-        st.session_state.clear()
-        st.switch_page("Home.py")
+    if st.session_state["authenticated"]:
+        if st.sidebar.button("Logout"):
+            del st.session_state["role"]
+            del st.session_state["authenticated"]
+            st.switch_page("Home.py")

@@ -366,3 +366,4 @@ def delete_outdated_records():
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
+        
