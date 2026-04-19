@@ -10,6 +10,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 import streamlit as st
+import requests
 from modules.nav import SideBarLinks
 
 st.set_page_config(layout='wide')
@@ -50,10 +51,28 @@ with col2:
         logger.info("Logging in as Recruiter persona")
         st.switch_page('pages/20_Recruiter_Home.py')
 
-    if st.button("Act as Evan Carter, Administrator", type="primary", use_container_width=True):
-        st.session_state['authenticated'] = True
-        st.session_state['role'] = 'administrator'
-        st.session_state['first_name'] = 'Evan'
-        logger.info("Logging in as Admin persona")
-        st.switch_page('pages/30_Admin_Home.py')
-        
+if st.button('Act as System Administrator',
+             type='primary',
+             use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = 'administrator'
+    st.session_state['first_name'] = 'SysAdmin'
+    st.switch_page('pages/30_Admin_Dashboard.py')
+
+if st.button('Act as Reece James, a Recruiter',
+             type='primary',
+             use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = 'recruiter'
+    st.session_state['first_name'] = 'Reece'
+    st.switch_page('pages/90_Recruiter_Home.py')
+
+if st.button('Act as Alex, a Job Seeker',
+             type='primary',
+             use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = 'job_seeker'
+    st.session_state['first_name'] = 'Alex'
+    st.session_state['student_id'] = 1
+    logger.info("Logging in as Job Seeker Persona")
+    st.switch_page('pages/40_Job_Seeker_Home.py')
