@@ -88,6 +88,32 @@ def admin_cleanup_nav():
     st.sidebar.page_link("pages/33_Data_Cleanup.py", label="Data Cleanup", icon="🖥️")
 
 
+# ---- Role: job_seeker -------------------------------------------------------
+
+def job_seeker_home_nav():
+    st.sidebar.page_link(
+        "pages/40_Job_Seeker_Home.py", label="Job Seeker Home", icon="🏠"
+    )
+
+
+def my_applications_nav():
+    st.sidebar.page_link(
+        "pages/41_My_Applications.py", label="My Applications", icon="📋"
+    )
+
+
+def reminders_nav():
+    st.sidebar.page_link(
+        "pages/42_Reminders.py", label="Reminders", icon="⏰"
+    )
+
+
+def offers_nav():
+    st.sidebar.page_link(
+        "pages/43_Offers.py", label="Compare Offers", icon="💼"
+    )
+
+
 # ---- Sidebar assembly -------------------------------------------------------
 
 def SideBarLinks(show_home=False):
@@ -132,6 +158,12 @@ def SideBarLinks(show_home=False):
             admin_errors_nav()
             admin_cleanup_nav()
 
+        if st.session_state["role"] == "job_seeker":
+            job_seeker_home_nav()
+            my_applications_nav()
+            reminders_nav()
+            offers_nav()
+
     # About link appears at the bottom for all roles
     about_page_nav()
 
@@ -140,4 +172,3 @@ def SideBarLinks(show_home=False):
             del st.session_state["role"]
             del st.session_state["authenticated"]
             st.switch_page("Home.py")
-
