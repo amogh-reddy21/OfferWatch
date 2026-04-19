@@ -66,14 +66,26 @@ def classification_nav():
 
 # ---- Role: administrator ----------------------------------------------------
 
-def admin_home_nav():
-    st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
+# def admin_home_nav():
+#     st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
 
 
-def ml_model_mgmt_nav():
-    st.sidebar.page_link(
-        "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
-    )
+# def ml_model_mgmt_nav():
+#     st.sidebar.page_link(
+#         "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
+#     )
+
+def admin_dashboard_nav():
+    st.sidebar.page_link("pages/30_Admin_Dashboard.py", label="Dashboard", icon="🖥️")
+
+def admin_users_nav():
+    st.sidebar.page_link("pages/31_User_Management_.py", label="User Management", icon="🖥️")
+
+def admin_errors_nav():
+    st.sidebar.page_link("pages/32_Error_Logs.py", label="Error Logs", icon="🖥️")
+
+def admin_cleanup_nav():
+    st.sidebar.page_link("pages/33_Data_Cleanup.py", label="Data Cleanup", icon="🖥️")
 
 
 # ---- Role: job_seeker -------------------------------------------------------
@@ -111,7 +123,11 @@ def SideBarLinks(show_home=False):
     """
 
     # Logo appears at the top of the sidebar on every page
-    st.sidebar.image("assets/logo.png", width=150)
+    # st.sidebar.image("assets/logo.png", width=150)
+    if "authenticated" in st.session_state and st.session_state.get("role") == "administrator":
+        st.sidebar.image("assets/OfferWatchAdminLogo.png", width=150)
+    else:
+        st.sidebar.image("assets/logo.png", width=150)
 
     # If no one is logged in, send them to the Home (login) page
     if "authenticated" not in st.session_state:
@@ -137,8 +153,10 @@ def SideBarLinks(show_home=False):
             classification_nav()
 
         if st.session_state["role"] == "administrator":
-            admin_home_nav()
-            ml_model_mgmt_nav()
+            admin_dashboard_nav()
+            admin_users_nav()
+            admin_errors_nav()
+            admin_cleanup_nav()
 
         if st.session_state["role"] == "job_seeker":
             job_seeker_home_nav()
@@ -154,5 +172,3 @@ def SideBarLinks(show_home=False):
             del st.session_state["role"]
             del st.session_state["authenticated"]
             st.switch_page("Home.py")
-
-    
