@@ -1,20 +1,17 @@
-# Idea borrowed from https://github.com/fsmosca/sample-streamlit-authenticator
-
-# This file has functions to add links to the left sidebar based on the user's role.
-
 import streamlit as st
+
+# ---- General ------------------------------------------------------------
 
 # ---- General ----------------------------------------------------------------
 
 def home_nav():
     st.sidebar.page_link("Home.py", label="Home", icon="🏠")
 
-
 def about_page_nav():
-    st.sidebar.page_link("pages/30_About.py", label="About", icon="🧠")
+    st.sidebar.page_link("pages/99_About.py", label="About", icon="🧠")
 
 
-# ---- Role: pol_strat_advisor ------------------------------------------------
+# ---- Role: Student ------------------------------------------------------
 
 def pol_strat_home_nav():
     st.sidebar.page_link(
@@ -82,11 +79,10 @@ def pipeline_stats_nav():
     st.sidebar.page_link("pages/93_Pipeline_Stats.py", label="Pipeline Stats", icon="📊")
 
 
-# ---- Role: administrator ----------------------------------------------------
+# ---- Role: Administrator -----------------------------------------------
 
 # def admin_home_nav():
-#     st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
-
+#     st.sidebar.page_link("pages/30_Admin_Home.py", label="Admin Home", icon="🖥️")
 
 # def ml_model_mgmt_nav():
 #     st.sidebar.page_link(
@@ -132,25 +128,17 @@ def offers_nav():
     )
 
 
-# ---- Sidebar assembly -------------------------------------------------------
+# ---- Sidebar Builder ----------------------------------------------------
 
 def SideBarLinks(show_home=False):
-    """
-    Renders sidebar navigation links based on the logged-in user's role.
-    The role is stored in st.session_state when the user logs in on Home.py.
-    """
-
-    # Logo appears at the top of the sidebar on every page
     # st.sidebar.image("assets/logo.png", width=150)
     if "authenticated" in st.session_state and st.session_state.get("role") == "administrator":
         st.sidebar.image("assets/OfferWatchAdminLogo.png", width=150)
     else:
         st.sidebar.image("assets/logo.png", width=150)
 
-    # If no one is logged in, send them to the Home (login) page
     if "authenticated" not in st.session_state:
-        st.session_state.authenticated = False
-        st.switch_page("Home.py")
+        st.session_state["authenticated"] = False
 
     if show_home:
         home_nav()
@@ -187,11 +175,8 @@ def SideBarLinks(show_home=False):
             candidate_pipeline_nav()
             pipeline_stats_nav()
 
-    # About link appears at the bottom for all roles
     about_page_nav()
 
-    if st.session_state["authenticated"]:
-        if st.sidebar.button("Logout"):
-            del st.session_state["role"]
-            del st.session_state["authenticated"]
-            st.switch_page("Home.py")
+    if st.sidebar.button("Logout", key=f"logout_{role or 'guest'}"):
+        st.session_state.clear()
+        st.switch_page("Home.py")
