@@ -28,6 +28,9 @@ st.markdown("""
             color: white;
             font-size: 1.5rem;
         }
+        [data-testid="stHeader"] {
+            background-color: #2c2c2c;
+        }
     </style>
 """, unsafe_allow_html=True)
 

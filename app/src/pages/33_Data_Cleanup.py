@@ -15,6 +15,9 @@ st.markdown("""
         .stApp {
             background-color: #FAF9F6;
         }
+        [data-testid="stHeader"] {
+            background-color: #2c2c2c;
+        }
     </style>
 """, unsafe_allow_html=True)
 
