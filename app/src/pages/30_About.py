@@ -5,18 +5,42 @@ st.set_page_config(layout='wide')
 
 SideBarLinks()
 
-st.write("# About this App")
+st.title("About OfferWatch")
+st.markdown("---")
 
 st.markdown(
     """
-    This is a demo app for Data and Software in International Government and Politics Dialogue 2025 Project Course.  
-
-    The goal of this demo is to provide information on the tech stack 
-    being used as well as demo some of the features of the various platforms. 
-
-    Stay tuned for more information and features to come!
+    OfferWatch is a data driven job search platform that brings structure, clarity, and useful data to the recruiting process for students, advisors, recruiters, and administrators. OfferWatch combines the employment process into a single platform with a common relational database, reducing the need for several documents and emails.
     """
 )
+
+st.markdown("---")
+
+st.subheader("Team GOATS")
+
+col1, col2, col3, col4, col5 = st.columns(5)
+
+with col1:
+    st.markdown("**Ansh Vats**")
+    st.write("vats.an@northeastern.edu")
+
+with col2:
+    st.markdown("**Vansh Kumar**")
+    st.write("kumar.van@northeastern.edu")
+
+with col3:
+    st.markdown("**Rudra Patel**")
+    st.write("patel.rudra4@northeastern.edu")
+
+with col4:
+    st.markdown("**Amogh Peddapothla**")
+    st.write("peddapothla.a@northeastern.edu")
+
+with col5:
+    st.markdown("**Brian Skiles**")
+    st.write("skiles.b@northeastern.edu")
+
+st.markdown("---")
 
 # Add a button to return to home page
 if st.button("Return to Home", type="primary"):
