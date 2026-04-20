@@ -200,7 +200,7 @@ def SideBarLinks(show_home=False):
     if "authenticated" in st.session_state and st.session_state.get("role") == "administrator":
         st.sidebar.image("assets/OfferWatchAdminLogo.png", width=150)
     else:
-        st.sidebar.image("assets/logo.png", width=150)
+        st.sidebar.image("assets/OfferWatch.png", width=250)
 
     if "authenticated" not in st.session_state:
         st.session_state["authenticated"] = False
