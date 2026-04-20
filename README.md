@@ -1,135 +1,239 @@
-# Spring 2026 CS 3200 Project Template
+# OfferWatch
 
-This is a template repo for Dr. Fontenot's Spring 2026 CS 3200 Course Project.
+**OfferWatch** is a data-driven job search platform built by Ansh Vats, Rudra Patel, Vansh Kumar, Amogh Peddapothla, and Brian Skiles for CS 3200 — Spring 2026.
 
-It includes most of the infrastructure setup (containers), sample databases, and example UI pages. Explore it fully and ask questions!
+Instead of scattered spreadsheets and self-reported email updates, OfferWatch centralizes the entire hiring pipeline — every application, interview, and offer — into a single shared platform powered by a relational database. It transforms raw job search activity into meaningful insights for students, career advisors, recruiters, and administrators, helping every stakeholder make smarter decisions and approach the hiring process with greater clarity and confidence.
+
+---
+
+## Table of Contents
+
+- [About the App](#about-the-app)
+- [User Personas](#user-personas)
+- [Prerequisites](#prerequisites)
+- [Repo Structure](#repo-structure)
+- [Setting Up the Repo](#setting-up-the-repo)
+- [Running the Docker Containers](#running-the-docker-containers)
+- [Frontend (Streamlit)](#frontend-streamlit)
+- [Backend (Flask REST API)](#backend-flask-rest-api)
+- [Database (MySQL)](#database-mysql)
+- [Important Tips](#important-tips)
+
+---
+
+## About the App
+
+The hiring process is fragmented and opaque. Students lose track of applications, advisors have no visibility into which students are falling behind, and recruiters lack the data they need to identify top candidates efficiently.
+
+OfferWatch solves this by providing:
+
+- A **personalized application tracking dashboard** with analytics so students can visualize their own hiring funnel
+- A **cohort-level analytics view** for career advisors and program directors to spot trends, flag struggling students, and measure placement outcomes
+- A **recruiter-facing pipeline view** to surface qualified candidates and track applicant volume by position
+- A **system administration layer** for maintaining data integrity, correcting records, and keeping the platform reliable
+
+---
+
+## User Personas
+
+### 1. Alex Chen — Job-Seeking Student
+Alex can log and track every job application, interview, and offer in one place. The dashboard visualizes Alex's personal hiring funnel (applied → interviewing → offered → accepted), surfaces key metrics like interview conversion rate and average time-to-offer, and allows comparison between resume versions and target industries.
+
+---
+
+### 2. Lisa Rodriguez — Program Director / Advisor
+Lisa oversees a large cohort of students and needs high-level visibility into how the group is performing across companies and industries. She can analyze aggregated placement data, identify trends in hiring outcomes, detect bottlenecks in the funnel, and drill down into individual student records when a concern arises.
+
+---
+
+### 3. Dr. Maria Patel — University Career Advisor
+Dr. Patel works one-on-one with students to improve their job search outcomes. She can view cohort-wide conversion rates (applied → interview → offer), flag "silent strugglers" (students with zero applications or no activity in 14+ days), compare resume version effectiveness by industry, and log coaching notes directly against individual student applications.
+
+---
+
+### 4. Jordan Kim — Pipeline Recruiter
+Jordan uses OfferWatch to identify high-potential candidates, see how many applicants have applied to specific open positions, and contact universities with strong pipelines in their target hiring areas. The recruiter view makes it easy to search and filter students by major, GPA, or target industry.
+
+---
+
+### 5. Evan Carter — System Administrator
+Evan is responsible for keeping the platform accurate and reliable. He can update or correct any application record, manage user accounts, audit data for inconsistencies, and trigger any maintenance tasks needed to keep the database healthy.
+
+---
 
 ## Prerequisites
 
-- A GitHub Account
-- A terminal-based git client or GUI Git client such as GitHub Desktop or the Git plugin for VSCode.
-- A distribution of Python running on your laptop. The distribution supported by the course is [Anaconda](https://www.anaconda.com/download) or [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install).
-  - Create a new Python 3.11 environment in `conda` named `db-proj` by running:  
-     ```bash
-     conda create -n db-proj python=3.11
-     ```
-  - Install the Python dependencies listed in `api/requirements.txt` and `app/src/requirements.txt` into your local Python environment. You can do this by running `pip install -r requirements.txt` in each respective directory.
-     ```bash
-     cd api
-     pip install -r requirements.txt
-     cd ../app/src
-     pip install -r requirements.txt
-     ```
-     Note that the `..` means go to the parent folder of the folder you're currently in (which is `api/` after the first command).
-     > **Why install locally if everything runs in Docker?** Installing the packages locally lets your IDE (VSCode) provide autocompletion, linting, and error highlighting as you write code. The app itself always runs inside the Docker containers — the local install is just for editor support.
-- VSCode with the Python Plugin installed
-  - You may use some other Python/code editor.  However, Course staff will only support VS Code. 
+- A GitHub account
+- A terminal-based or GUI Git client (e.g., [GitHub Desktop](https://desktop.github.com/) or the Git plugin for VSCode)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running on your machine
+- A distribution of Python running on your laptop. The course-supported distribution is [Anaconda](https://www.anaconda.com/download) or [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install).
 
+  Create a new Python 3.11 environment named `db-proj`:
+  ```bash
+  conda create -n db-proj python=3.11
+  conda activate db-proj
+  ```
 
-## Structure of the Repo
+  Install the Python dependencies for both the API and app locally (so your IDE can provide autocompletion and linting):
+  ```bash
+  cd api
+  pip install -r requirements.txt
+  cd ../app/src
+  pip install -r requirements.txt
+  ```
 
-- This repository is organized into five main directories:
-  - `./app` - the Streamlit app
-  - `./api` - the Flask REST API
-  - `./database-files` - SQL scripts to initialize the MySQL database
-  - `./datasets` - folder for storing datasets
-  - `./ml-src` - folder for ML model development (Jupyter notebooks, training scripts)
+  > **Why install locally if everything runs in Docker?** Installing the packages locally lets your IDE (VSCode) provide autocompletion, linting, and error highlighting as you write code. The app itself always runs inside the Docker containers — the local install is just for editor support.
 
-- The repo also contains a `docker-compose.yaml` file that is used to set up the Docker containers for the front end app, the REST API, and MySQL database. 
+- **VSCode** with the Python plugin installed (course staff will only support VSCode)
 
-## Suggestion for Learning the Project Code Base
+---
 
-If you are not familiar with web app development, this code base might be confusing. But don't worry, we'll get through it together. Here are some suggestions for learning the code base:
+## Repo Structure
 
-1. Start by exploring the `./app` directory. This is where the Streamlit app is located. The Streamlit app is a Python-based web app that is used to interact with the user. It's a great way to build a simple web app without having to learn a lot of web development.
-1. Next, explore the `./api` directory. This is where the Flask REST API is located. The REST API is used to interact with the database and perform other server-side tasks. You might also consider this the "application logic" or "business logic" layer of your app. 
-1. Finally, explore the `./database-files` directory. This is where the SQL scripts are located that will be used to initialize the MySQL database.
-1. Bonus: If you want to have a totally separate copy of the Template Repo on your laptop that you can use to explore and try things without messing up your team repo, see *Setting Up a Personal Testing Repo (Optional)* section below. 
+```
+offerwatch/
+├── app/                    # Streamlit frontend
+│   └── src/
+│       ├── pages/          # One .py file per page, prefixed by persona number
+│       ├── modules/
+│       │   └── nav.py      # Role-based sidebar navigation
+│       ├── Home.py         # Landing page with persona selector
+│       └── .streamlit/
+│           └── config.toml # Disables default Streamlit sidebar
+├── api/                    # Flask REST API
+│   ├── backend/
+│   │   ├── student/        # Routes for Alex Chen persona
+│   │   ├── program_director/ # Routes for Lisa Rodriguez persona
+│   │   ├── university_career/ # Routes for Dr. Maria Patel persona
+│   │   ├── recruiter/      # Routes for Jordan Kim persona
+│   │   └── admin/          # Routes for Evan Carter persona
+│   └── requirements.txt
+├── database-files/         # SQL scripts to initialize MySQL (run alphabetically)
+├── datasets/               # Source datasets
+├── ml-src/                 # ML model development (notebooks, training scripts)
+├── docker-compose.yaml     # Main Docker Compose config
+├── sandbox.yaml            # Personal testing Docker Compose config
+└── README.md
+```
 
-## Setting Up the Repos
-<details>
-<summary>Setting Up a Personal Sandbox Repo (Optional)</summary>
+---
 
-### Setting Up a Personal Sandbox Repo (Optional)
+## Setting Up the Repo
 
-**Before you start**: You need to have a GitHub account and a terminal-based git client or GUI Git client such as GitHub Desktop or the Git plugin for VSCode.
+### One team member (Repo Owner) must do this first:
 
-1. Clone this repo to your local machine.
-   1. You can do this by clicking the green "Code" button on the top right of the repo page and copying the URL. Then, in your terminal, run `git clone <URL>`.
-   1. Or, you can use the GitHub Desktop app to clone the repo. See [this page](https://docs.github.com/en/desktop/adding-and-cloning-repositories/cloning-a-repository-from-github-to-github-desktop) of the GitHub Desktop Docs for more info. 
-1. Open the repository folder in VSCode.
-1. Set up the `.env` file in the `api` folder based on the `.env.template` file.
-   1. Make a copy of the `.env.template` file and name it `.env`. 
-   1. Open the new `.env` file. 
-   1. On the last line, delete the `<...>` placeholder text, and put a password. Don't reuse any passwords you use for any other services (email, etc.) 
-1. For running the testing containers (for your personal repo), you will tell `docker compose` to use a different configuration file than the typical one.  The one you will use for testing is `sandbox.yaml`.
-   1. `docker compose -f sandbox.yaml up -d` to start all the containers in the background
-   1. `docker compose -f sandbox.yaml down` to shutdown and delete the containers
-   1. `docker compose -f sandbox.yaml up db -d` only start the database container (replace db with api or app for the other two services as needed)
-   1. `docker compose -f sandbox.yaml stop` to "turn off" the containers but not delete them.
-</details>
+1. **Fork** this template repo into your own GitHub account and rename it to match your project.
+2. Under **Settings → Collaborators and Teams**, add all teammates with **Write** access.
 
-### Setting Up Your Team's Repo
+### All other team members:
 
-**Before you start**: As a team, one person needs to assume the role of _Team Project Repo Owner_.
+1. Accept the GitHub invitation.
+2. Clone the team repo to your local machine:
+   ```bash
+   git clone <your-team-repo-url>
+   ```
+3. Set up the `.env` file in the `api/` folder:
+   ```bash
+   cd api
+   cp .env.template .env
+   ```
+   Open `.env` and replace the `<...>` placeholder on the last line with a password. Do not reuse a password from any other service.
 
-1. The Team Project Repo Owner needs to **fork** this template repo into their own GitHub account **and give the repo a name consistent with your project's name**. If you're worried that the repo is public, don't. Every team is doing a different project.
-1. In the newly forked team repo, the Team Project Repo Owner should go to the **Settings** tab, choose **Collaborators and Teams** on the left-side panel. Add each of your team members to the repository with Write access.
+---
 
-**Remaining Team Members**
+## Running the Docker Containers
 
-1. Each of the other team members will receive an invitation to join.
-1. Once you have accepted the invitation, you should clone the Team's Project Repo to your local machine.
-1. Set up the `.env` file in the `api` folder based on the `.env.template` file.
-1. For running the testing containers (for your team's repo):
-   1. `docker compose up -d` to start all the containers in the background
-   1. `docker compose down` to shutdown and delete the containers
-   1. `docker compose up db -d` only start the database container (replace db with api or app for the other two services as needed)
-   1. `docker compose stop` to "turn off" the containers but not delete them.
+All three services (Streamlit app, Flask API, MySQL database) run inside Docker containers coordinated by `docker-compose.yaml`.
 
-**Note:** You can also use the Docker Desktop GUI to start and stop the containers after the first initial run.
+**Start all containers** (runs in the background):
+```bash
+docker compose up -d
+```
+
+**Stop and remove containers**:
+```bash
+docker compose down
+```
+
+**Restart a specific service** (replace `app` with `api` or `db` as needed):
+```bash
+docker compose up app -d
+```
+
+**Stop containers without deleting them**:
+```bash
+docker compose stop
+```
+
+**Fully rebuild the database** (required any time you edit a `.sql` file):
+```bash
+docker compose down db -v && docker compose up db -d
+```
+
+> You can also manage containers visually through the **Docker Desktop** GUI after the first run.
+
+### Personal Sandbox (Optional)
+
+If you want a separate copy of the repo to experiment without touching the team repo, use `sandbox.yaml` instead:
+
+```bash
+docker compose -f sandbox.yaml up -d    # start
+docker compose -f sandbox.yaml down     # stop and delete
+docker compose -f sandbox.yaml stop     # stop without deleting
+```
+
+---
+
+## Frontend (Streamlit)
+
+The frontend lives in `app/src/` and is built with [Streamlit](https://streamlit.io/). When the app loads, `Home.py` presents a persona selector that sets the user's role in `session_state`. `app/src/modules/nav.py` uses that role to render the correct sidebar links for the session, and `app/src/.streamlit/config.toml` disables the default Streamlit navigation panel so the app controls it entirely.
+
+Any saved changes to `.py` files in `app/src/` are hot-reloaded — click **Always Rerun** in the browser tab to pick them up. If a bug crashes the container, fix it and run `docker compose restart app`.
+
+---
+
+## Backend (Flask REST API)
+
+The REST API lives in `api/backend/` and is organized into one Blueprint per persona, each handling the routes for that user's feature set. All four HTTP verbs are used — for example, `GET /advisor/<id>/dashboard` returns cohort-wide conversion rates, `POST` adds coaching notes, `PUT` corrects application records, and `DELETE` removes notes. The API hot-reloads on file save.
+
+---
+
+## Database (MySQL)
+
+The MySQL database is initialized by running all `.sql` files in `database-files/` in **alphabetical order** when the container is first created. File naming conventions reflect this ordering (e.g., `00_schema.sql` before `01_data.sql`).
+
+### Key Entities
+
+| Entity | Description |
+|---|---|
+| `Student` | Job-seeking students with GPA, major, activity tracking |
+| `User` | Shared user table for login and role assignment |
+| `Job_Application` | Applications linking students to positions, with status and resume used |
+| `Position` | Open roles at employers |
+| `Employer` | Companies with industry classification and location |
+| `Industry` | Industry tags with placement rate and market share data |
+| `Interview` | Interview records linked to applications |
+| `Job_Offer` | Offer records including salary, deadline, and acceptance status |
+| `Resume` | Resume versions with conversion rate tracking |
+| `Advisor` | Career advisors linked to student cohorts |
+| `StudentIndustry` | Bridge table for many-to-many student↔target industry |
+
+### Updating the Database
+
+If you modify any `.sql` file, you **must recreate** the MySQL container — restarting it alone will not re-run the SQL scripts:
+
+```bash
+docker compose down db -v && docker compose up db -d
+```
+
+Check the MySQL container's **Logs** tab in Docker Desktop (search for `Error`) to debug any SQL issues.
+
+---
 
 ## Important Tips
 
-1. In general, any changes you make to the api code base (REST API) or the Streamlit app code should be *hot reloaded* when the files are saved.  This means that the changes should be immediately available.  
-   1. Don't forget to click the **Always Rerun** button in the browser tab of the Streamlit app for it to reload with changes.
-   1. Sometimes, a bug in the code will shut the containers down.  If this is the case, try and fix the bug in the code.  Then you can restart the `app` container in Docker Desktop or restart all the containers with `docker compose restart` (no *-d* flag).
-1. The MySQL Container is different. 
-   1. When the MySQL container is ***created*** the first time, it will execute any `.sql` files in the `./database-files` folder. **Important:** it will execute them in alphabetical order.  
-   1. The MySQL Container's log files are your friend! Remember, you can access them in Docker Desktop by going to the MySQL Container, and clicking on the `Logs` tab.  If there are errors in your .sql files as it is trying to run them, there will be a message in the logs. You can search 🔍 for `Error` to find them more quickly. 
-   1. If you need to update anything in any of your SQL files, you **MUST** recreate the MySQL container (rather than just stopping and restarting it).  You can recreate the MySQL container by using the following command: `docker compose down db -v && docker compose up db -d`. 
-      1. `docker compose down db -v` stops and deletes the MySQL container and the volume attached to it. 
-      1. `docker compose up db -d` will create a new db container and re-run the files in the `database-files` folder. 
-
-## Handling User Role Access and Control
-
-In most applications, when a user logs in, they assume a particular role in the app. For instance, when one logs in to a stock price prediction app, they may be a single investor, a portfolio manager, or a corporate executive (of a publicly traded company). Each of those _roles_ will likely present some similar features as well as some different features when compared to the other roles. So, how do you accomplish this in Streamlit? This is sometimes called Role-based Access Control, or **RBAC** for short.
-
-The code in this project demonstrates how to implement a simple RBAC system in Streamlit but without actually using user authentication (usernames and passwords). The Streamlit pages from the original template repo are split up among 3 roles - Political Strategist, USAID Worker, and a System Administrator role (this is used for any sort of system tasks such as re-training ML model, etc.). It also demonstrates how to deploy an ML model.
-
-Wrapping your head around this will take a little time and exploration of this code base. Some highlights are below.
-
-### Getting Started with the RBAC
-
-1. We need to turn off the standard panel of links on the left side of the Streamlit app. This is done through the `app/src/.streamlit/config.toml` file. So check that out. We are turning it off so we can control directly what links are shown.
-1. Then I created a new python module in `app/src/modules/nav.py`. When you look at the file, you will see that there are functions for basically each page of the application. The `st.sidebar.page_link(...)` adds a single link to the sidebar. We have a separate function for each page so that we can organize the links/pages by role.
-1. Next, check out the `app/src/Home.py` file. Notice that there are 3 buttons added to the page and when one is clicked, it redirects via `st.switch_page(...)` to that Roles Home page in `app/src/pages`. But before the redirect, I set a few different variables in the Streamlit `session_state` object to track role, first name of the user, and that the user is now authenticated.
-1. Notice near the top of `app/src/Home.py` and all other pages, there is a call to `SideBarLinks(...)` from the `app/src/modules/nav.py` module. This is the function that will use the role set in `session_state` to determine what links to show the user in the sidebar.
-1. The pages are organized by Role. Pages that start with a `0` are related to the _Political Strategist_ role. Pages that start with a `1` are related to the _USAID worker_ role. And, pages that start with a `2` are related to The _System Administrator_ role.
-
-
-## (Completely Optional) Incorporating ML Models into your Project
-
-_Note_: This project only contains the infrastructure for a hypothetical ML model.
-
-1. Collect and preprocess necessary datasets for your ML models.
-1. Build, train, and test your ML model in a Jupyter Notebook.
-   - You can store your datasets in the `datasets` folder. You can also store your Jupyter Notebook in the `ml-src` folder.
-1. Once your team is happy with the model's performance, convert your Jupyter Notebook code for the ML model to a pure Python script.
-   - You can include the `training` and `testing` functionality as well as the `prediction` functionality.
-   - Develop and test this pure Python script first in the `ml-src` folder.
-   - You may or may not need to include data cleaning, though.
-1. Review the `api/backend/ml_models` module. In this folder,
-   - We've put a sample (read _fake_) ML model in the `model01.py` file. The `predict` function will be called by the Flask REST API to perform '_real-time_' prediction based on model parameter values that are stored in the database. **Important**: you would never want to hard code the model parameter weights directly in the prediction function.
-1. The prediction route for the REST API is in `api/backend/simple/simple_routes.py`. Basically, it accepts two URL parameters and passes them to the `prediction` function in the `ml_models` module. The `prediction` route/function packages up the value(s) it receives from the model's `predict` function and sends it back to Streamlit as JSON.
-1. Back in Streamlit, check out `app/src/pages/11_Prediction.py`. Here, two numeric input fields are created. When the button is pressed, it makes a request to the REST API at `/prediction/{var_01}/{var_02}` and passes the values from the two inputs as URL path parameters. It gets back the results from the route and displays them.
+1. **Always Rerun:** After saving changes to the Streamlit app, click the **Always Rerun** button in the browser tab so it picks up the latest code.
+2. **Container crashes:** A Python bug will sometimes shut down the `app` container. Fix the bug, then restart with `docker compose restart`.
+3. **MySQL logs are your friend:** If the database fails to initialize, open Docker Desktop → MySQL container → **Logs** tab and search for `Error`.
+4. **Don't edit `.env` files into version control.** The `.env` file is in `.gitignore` for a reason — it contains your database password.
+5. **SQL file order matters.** Files in `database-files/` run alphabetically. If table B depends on table A, make sure A's file sorts before B's.
