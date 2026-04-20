@@ -1,23 +1,8 @@
 # OfferWatch
 
-**OfferWatch** is a data-driven job search platform built by Ansh Vats, Rudra Patel, Vansh Kumar, Amogh Peddapothla, and Brian Skiles for CS 3200 — Spring 2026.
+**OfferWatch** is a data-driven job search platform built by Ansh Vats, Rudra Patel, Vansh Kumar, Amogh Peddapothla, and Brian Skiles.
 
 Instead of scattered spreadsheets and self-reported email updates, OfferWatch centralizes the entire hiring pipeline — every application, interview, and offer — into a single shared platform powered by a relational database. It transforms raw job search activity into meaningful insights for students, career advisors, recruiters, and administrators, helping every stakeholder make smarter decisions and approach the hiring process with greater clarity and confidence.
-
----
-
-## Table of Contents
-
-- [About the App](#about-the-app)
-- [User Personas](#user-personas)
-- [Prerequisites](#prerequisites)
-- [Repo Structure](#repo-structure)
-- [Setting Up the Repo](#setting-up-the-repo)
-- [Running the Docker Containers](#running-the-docker-containers)
-- [Frontend (Streamlit)](#frontend-streamlit)
-- [Backend (Flask REST API)](#backend-flask-rest-api)
-- [Database (MySQL)](#database-mysql)
-- [Important Tips](#important-tips)
 
 ---
 
@@ -66,25 +51,15 @@ Evan is responsible for keeping the platform accurate and reliable. He can updat
 - A GitHub account
 - A terminal-based or GUI Git client (e.g., [GitHub Desktop](https://desktop.github.com/) or the Git plugin for VSCode)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running on your machine
-- A distribution of Python running on your laptop. The course-supported distribution is [Anaconda](https://www.anaconda.com/download) or [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install).
-
-  Create a new Python 3.11 environment named `db-proj`:
+- Python 3.11 — we recommend [Anaconda](https://www.anaconda.com/download) or [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install). Create a new environment and install dependencies:
   ```bash
   conda create -n db-proj python=3.11
   conda activate db-proj
+  cd api && pip install -r requirements.txt
+  cd ../app/src && pip install -r requirements.txt
   ```
-
-  Install the Python dependencies for both the API and app locally (so your IDE can provide autocompletion and linting):
-  ```bash
-  cd api
-  pip install -r requirements.txt
-  cd ../app/src
-  pip install -r requirements.txt
-  ```
-
-  > **Why install locally if everything runs in Docker?** Installing the packages locally lets your IDE (VSCode) provide autocompletion, linting, and error highlighting as you write code. The app itself always runs inside the Docker containers — the local install is just for editor support.
-
-- **VSCode** with the Python plugin installed (course staff will only support VSCode)
+- Installing dependencies locally (even though the app runs in Docker) lets your IDE provide autocompletion and linting as you write code
+- **VSCode** with the Python plugin installed
 
 ---
 
@@ -227,13 +202,3 @@ docker compose down db -v && docker compose up db -d
 ```
 
 Check the MySQL container's **Logs** tab in Docker Desktop (search for `Error`) to debug any SQL issues.
-
----
-
-## Important Tips
-
-1. **Always Rerun:** After saving changes to the Streamlit app, click the **Always Rerun** button in the browser tab so it picks up the latest code.
-2. **Container crashes:** A Python bug will sometimes shut down the `app` container. Fix the bug, then restart with `docker compose restart`.
-3. **MySQL logs are your friend:** If the database fails to initialize, open Docker Desktop → MySQL container → **Logs** tab and search for `Error`.
-4. **Don't edit `.env` files into version control.** The `.env` file is in `.gitignore` for a reason — it contains your database password.
-5. **SQL file order matters.** Files in `database-files/` run alphabetically. If table B depends on table A, make sure A's file sorts before B's.
