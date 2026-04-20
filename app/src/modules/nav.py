@@ -206,9 +206,7 @@ def SideBarLinks(show_home=False):
         st.session_state["authenticated"] = False
         st.switch_page("Home.py")
 
-    if show_home:
-        home_nav()
-
+    home_nav()
 
     if st.session_state["authenticated"]:
 
@@ -240,7 +238,6 @@ def SideBarLinks(show_home=False):
             advisor_home_nav()
             advisor_flagged_nav()
             advisor_industry_nav()
-
 
     about_page_nav()
 
