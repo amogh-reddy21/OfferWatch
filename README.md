@@ -2,7 +2,7 @@
 
 **OfferWatch** is a data-driven job search platform built by Ansh Vats, Rudra Patel, Vansh Kumar, Amogh Peddapothla, and Brian Skiles.
 
-Instead of scattered spreadsheets and self-reported email updates, OfferWatch centralizes the entire hiring pipeline — every application, interview, and offer — into a single shared platform powered by a relational database. It transforms raw job search activity into meaningful insights for students, career advisors, recruiters, and administrators, helping every stakeholder make smarter decisions and approach the hiring process with greater clarity and confidence.
+Instead of scattered spreadsheets and self-reported email updates, OfferWatch centralizes the entire hiring pipeline, (every application, interview, and offer) into a single shared platform powered by a relational database. It transforms raw job search activity into meaningful insights for students, career advisors, recruiters, and administrators, helping every stakeholder make smarter decisions and approach the hiring process with greater clarity and confidence.
 
 ---
 
@@ -26,7 +26,7 @@ Alex can log and track every job application, interview, and offer in one place.
 
 ---
 
-### 2. Lisa Rodriguez — Program Director / Advisor
+### 2. Lisa Rodriguez — Career Services Analyst
 Lisa oversees a large cohort of students and needs high-level visibility into how the group is performing across companies and industries. She can analyze aggregated placement data, identify trends in hiring outcomes, detect bottlenecks in the funnel, and drill down into individual student records when a concern arises.
 
 ---
@@ -36,8 +36,8 @@ Dr. Patel works one-on-one with students to improve their job search outcomes. S
 
 ---
 
-### 4. Jordan Kim — Pipeline Recruiter
-Jordan uses OfferWatch to identify high-potential candidates, see how many applicants have applied to specific open positions, and contact universities with strong pipelines in their target hiring areas. The recruiter view makes it easy to search and filter students by major, GPA, or target industry.
+### 4. Reece James — Pipeline Recruiter
+Reece uses OfferWatch to identify high-potential candidates, see how many applicants have applied to specific open positions, and contact universities with strong pipelines in their target hiring areas. The recruiter view makes it easy to search and filter students by major, GPA, or target industry.
 
 ---
 
@@ -80,7 +80,7 @@ offerwatch/
 │   │   ├── student/        # Routes for Alex Chen persona
 │   │   ├── program_director/ # Routes for Lisa Rodriguez persona
 │   │   ├── university_career/ # Routes for Dr. Maria Patel persona
-│   │   ├── recruiter/      # Routes for Jordan Kim persona
+│   │   ├── recruiters/      # Routes for Reece James persona
 │   │   └── admin/          # Routes for Evan Carter persona
 │   └── requirements.txt
 ├── database-files/         # SQL scripts to initialize MySQL (run alphabetically)
