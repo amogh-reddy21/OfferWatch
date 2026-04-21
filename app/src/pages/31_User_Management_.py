@@ -78,7 +78,6 @@ institution_options = {
     8: "University of Toroto",
     9: "McGill University",
     10: "New York University"
-
 }
 
 with col2:
@@ -111,11 +110,7 @@ with col1:
     update_id = st.number_input("User ID to Update", min_value=1, step=1)
     new_role_id = st.selectbox("New Role", options=[1, 2, 3, 4],format_func=role_options.get)
 with col2:
-<<<<<<< HEAD
     new_institution_id = st.selectbox("New Institution", options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],format_func=institution_options.get)
-=======
-    new_institution_id = st.selectbox("New Institution", options=[1, 2, 3, 4],format_func=institution_options.get)
->>>>>>> 1e42fa0 (Pulled changes onto my local machine)
 
 if st.button("Update User", type="primary"):
     update_input = {
