@@ -29,9 +29,7 @@ st.title("My Applications")
 st.write("Track every job you've applied to, update their status as you hear back, and keep prep notes in one spot.")
 
 
-# ============================================================
-# LIST APPLICATIONS (US1, US3)
-# ============================================================
+# LIST APPLICATIONS
 
 st.subheader("All Applications")
 
@@ -53,9 +51,8 @@ else:
     st.info("No applications match that filter.")
 
 
-# ============================================================
-# LOG A NEW APPLICATION (US1) - POST
-# ============================================================
+
+# LOG A NEW APPLICATION - POST
 
 st.subheader("Log a New Application")
 
@@ -98,9 +95,7 @@ if st.button("Add Application", type="primary"):
         st.error(f"Couldn't log that application: {result.json().get('error', 'unknown error')}")
 
 
-# ============================================================
-# UPDATE STATUS OR NOTES (US3) - PUT
-# ============================================================
+# UPDATE STATUS OR NOTES - PUT
 
 st.subheader("Update an Application")
 st.write("Change the status when you hear back, or add more notes.")
@@ -137,9 +132,7 @@ if st.button("Update Application", type="primary"):
         st.error("Application not found.")
 
 
-# ============================================================
 # ARCHIVE (SOFT-DELETE) AN APPLICATION - DELETE
-# ============================================================
 
 st.subheader("Archive an Application")
 st.write("Remove an application from your active list without losing the record.")
@@ -155,9 +148,7 @@ if st.button("Archive Application", type="primary"):
         st.error("Application not found.")
 
 
-# ============================================================
 # NOTES SECTION (US6) - GET + POST
-# ============================================================
 
 st.subheader("Interview Prep Notes")
 st.write("View and add prep notes, interview feedback, or anything you want to remember about a specific application.")

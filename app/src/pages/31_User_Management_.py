@@ -71,12 +71,19 @@ institution_options = {
     1: "Northeastern University", 
     2: "Boston University", 
     3: "University of Alberta",
-    4: "Duke University"
+    4: "Duke University",
+    5: "MIT",
+    6: "Harvard University",
+    7: "Stanford University",
+    8: "University of Toroto",
+    9: "McGill University",
+    10: "New York University"
+
 }
 
 with col2:
     last_name = st.text_input("Last Name")
-    institution_id = st.selectbox("Institution", options=[1, 2, 3, 4], format_func=institution_options.get)
+    institution_id = st.selectbox("Institution", options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], format_func=institution_options.get)
 
 if st.button("Add User", type="primary"):
     if first_name and last_name and email:
@@ -104,7 +111,7 @@ with col1:
     update_id = st.number_input("User ID to Update", min_value=1, step=1)
     new_role_id = st.selectbox("New Role", options=[1, 2, 3, 4],format_func=role_options.get)
 with col2:
-    new_institution_id = st.selectbox("New Institution", options=[1, 2, 3, 4],format_func=institution_options.get)
+    new_institution_id = st.selectbox("New Institution", options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],format_func=institution_options.get)
 
 if st.button("Update User", type="primary"):
     update_input = {
@@ -112,7 +119,7 @@ if st.button("Update User", type="primary"):
         "InstitutionID": new_institution_id
     }
     update_result = requests.put(f"{API_BASE}/admin/users/{update_id}", json=update_input)
-    if update_result.status_code == 200:
+    if update_result.status_code == 200:    
         st.success("User updated successfully!")
         st.rerun()
     else:
